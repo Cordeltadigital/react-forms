@@ -1,0 +1,1 @@
+/* jest doesn't parse .css files when imported - this file is mapped in package.json `jest` section */
