@@ -28,6 +28,8 @@ export default ({ onSubmit, onCancel }) => (
 )
 ```
 
+All `props` passed to components are passed to underlying HTML elements.
+
 `onSubmit` handler is passed an object containing form values, in this case:
 
 ```json
@@ -38,7 +40,8 @@ export default ({ onSubmit, onCancel }) => (
 }
 ```
 
-Simple dotted notation can be used to create deep object structures:
+Simple dotted notation can be used to create deep object structures, and using `type="number"` will coerce the provided 
+value to a Number type.:
 
 ```jsx
 <Form>
@@ -59,15 +62,11 @@ Simple dotted notation can be used to create deep object structures:
 }
 ```
 
-Using `type="number"` will coerce the provided value to a Number type.
-
 The `onClick` handler passed to the `Submit` component will also be triggered when the `enter` key is pressed while form 
 elements are active.
 
 If a promise is returned from the `onClick` handler, the button is disabled and a simple SVG spinner is displayed until
 the promise resolves or rejects.
-
-All `props` passed to components are passed to underlying HTML elements.
 
 ## Styling
 
@@ -75,7 +74,7 @@ No styling is provided out of the box. Default corresponding HTML elements are u
 CSS or style attributes.
 
 Additionally, a `validated` class is applied to individual elements as they change, and to the form when it is
-submitted. This allows you to make use of the `:invalid` pseudo-class, but only display validation styles after
+submitted. This allows you to make use of the `:invalid` CSS pseudo-class, but only display validation styles after
 validation has occurred.
 
 Styling to work with the example code above might look something like:
