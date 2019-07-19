@@ -30,11 +30,11 @@ export default ({ onSubmit, onCancel }) => (
 
 `onSubmit` handler is passed an object containing form values, in this case:
 
-```javascript
+```json
 {
-  name: '',
-  description: '',
-  type: 'One'
+  "name": "",
+  "description": "",
+  "type": "One"
 }
 ```
 
@@ -49,12 +49,12 @@ Simple dotted notation can be used to create deep object structures:
 </Form>
 ```
 
-```javascript
+```json
 {
-  name: '',
-  inventory: {
-    stockLevel: '',
-    quantityOnOrder: ''
+  "name": "",
+  "inventory": {
+    "stockLevel": "",
+    "quantityOnOrder": ""
   }
 }
 ```
