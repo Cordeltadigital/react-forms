@@ -18,7 +18,6 @@ export default class extends Component {
       required={this.props.required}
       className={'textarea' + (this.state.validated ? ' validated' : '')}
       onChange={this.handleChange} 
-      data-focus={this.props.focus}
     />
   }
 }

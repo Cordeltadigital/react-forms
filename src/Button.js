@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
-import Spinner from './spinner'
+import spinner from './spinner'
 
 export default function createButtonComponent(submit) {
   return class extends Component {
@@ -16,12 +16,7 @@ export default function createButtonComponent(submit) {
         const clickResponse = onClick(values)
         if(clickResponse instanceof Promise) {
           this.setState({ executing: true })
-          clickResponse
-            .then(() => this.setState({ executing: false }))
-            .catch(error => {
-              this.setState({ executing: false })
-              throw error
-            })
+          clickResponse.finally(() => this.setState({ executing: false }))
         }
       }
     }
@@ -51,7 +46,7 @@ export default function createButtonComponent(submit) {
           ref={this.attachSubmitHandler}
         >
           {this.props.children}
-          {this.state.executing && <Spinner />}
+          {this.state.executing && spinner}
         </button>
       )
     }

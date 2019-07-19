@@ -27,6 +27,7 @@ test("elements are rendered and values passed to onClick handler", () => {
 })
 
 // test("values provides an accessor to form values", () => {})
+// test("button displays spinner until promise returned from onClick completes", () => {})
 // test("passing value prop to consumers sets initial value", () => {})
 // test("html validation attributes prevent onClick handler from firing if invalid", () => {})
 // test("validated class is appended to invalid element className", () => {})

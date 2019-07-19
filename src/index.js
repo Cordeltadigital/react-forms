@@ -5,7 +5,6 @@ import SelectConsumer from './Select'
 import ButtonConsumer from './Button'
 import TextareaConsumer from './Textarea'
 import ValuesConsumer from './Values'
-import './form.css'
 
 const context = createContext()
 

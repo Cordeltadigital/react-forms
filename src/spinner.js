@@ -1,7 +1,7 @@
 import React from 'react'
 
 module.exports = (
-  <svg xmlns="http://www.w3.org/2000/svg" class="lds-spinner" width="20px" height="20px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;"><g transform="rotate(0 50 50)">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style={{ background: 'none' }}><g transform="rotate(0 50 50)">
     <rect x="47" y="10" rx="9.4" ry="2" width="6" height="20" fill="#6090d0">
       <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9166666666666666s" repeatCount="indefinite"/>
     </rect>
