@@ -41,7 +41,7 @@ All `props` passed to components are passed to underlying HTML elements.
 ```
 
 Simple dotted notation can be used to create deep object structures, and using `type="number"` will coerce the provided 
-value to a Number type.:
+value to a Number type:
 
 ```jsx
 <Form>

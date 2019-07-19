@@ -42,7 +42,7 @@ export default function createButtonComponent(submit) {
       if(!this.props.values) throw new Error('You must consume the Button component through the form/index.js module')
 
       const { setValue, setValidated, values, ...propsToPass} = this.props
-      const className = (this.state.validated ? 'validated ' : '') + this.props.className
+      const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
       return (
         <button
@@ -53,7 +53,7 @@ export default function createButtonComponent(submit) {
           ref={this.attachSubmitHandler}
         >
           {this.props.children}
-          {this.state.executing && spinner}
+          {spinner}
         </button>
       )
     }

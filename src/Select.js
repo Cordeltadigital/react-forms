@@ -22,7 +22,7 @@ export default class extends Component {
 
   render() {
     const { setValue, setValidated, values, ...propsToPass} = this.props
-    const className = (this.state.validated ? 'validated ' : '') + this.props.className
+    const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
     return <select
       {...propsToPass}

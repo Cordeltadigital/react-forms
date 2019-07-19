@@ -14,7 +14,7 @@ export default class extends Component {
     if(!this.props.setValue) throw new Error('You must consume the Textarea component through the form/index.js module')
 
     const { setValue, setValidated, values, ...propsToPass} = this.props
-    const className = (this.state.validated ? 'validated ' : '') + this.props.className
+    const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
     return <textarea
       {...propsToPass}
