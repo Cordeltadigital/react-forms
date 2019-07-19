@@ -49,8 +49,8 @@ Simple dotted notation can be used to create deep object structures:
 ```jsx
 <Form>
   <Input name="name" />
-  <Input name="inventory.stockLevel" />
-  <Input name="inventory.quantityOnOrder" />
+  <Input name="inventory.stockLevel" type="number" />
+  <Input name="inventory.quantityOnOrder" type="number" />
   <Submit onClick={values => console.log(values)} />
 </Form>
 ```
@@ -59,11 +59,13 @@ Simple dotted notation can be used to create deep object structures:
 {
   "name": "",
   "inventory": {
-    "stockLevel": "",
-    "quantityOnOrder": ""
+    "stockLevel": 0,
+    "quantityOnOrder": 0
   }
 }
 ```
+
+Using `type="number"` will coerce the provided value to a Number type.
 
 The `onClick` handler passed to the `Submit` component will also be triggered when the `enter` key is pressed while form 
 elements are active.

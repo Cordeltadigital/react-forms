@@ -6,7 +6,8 @@ export default class extends Component {
 
   handleChange = event => {
     if(this.props.name) {
-      this.props.setValue(this.props.name, event.target.value)
+      const value = this.props.type === 'number' ? +event.target.value : event.target.value
+      this.props.setValue(this.props.name, value)
       event.target.checkValidity()
       this.setState({ validated: true })
     }

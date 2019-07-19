@@ -6,7 +6,10 @@ export default function createButtonComponent(submit) {
   return class extends Component {
     state = { executing: false }
 
-    onButtonClick = e => this.executeHandler(e.target.closest('form'))
+    onButtonClick = e => {
+      this.executeHandler(e.target.closest('form'))
+      e.preventDefault()
+    }
 
     executeHandler = form => {
       const { onClick, values, setValidated } = this.props
