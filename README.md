@@ -45,7 +45,7 @@ Simple dotted notation can be used to create deep object structures:
   <Input name="name" />
   <Input name="inventory.stockLevel" />
   <Input name="inventory.quantityOnOrder" />
-  <Submit onClick={console.log} />
+  <Submit onClick={values => console.log(values)} />
 </Form>
 ```
 
