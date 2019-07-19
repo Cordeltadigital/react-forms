@@ -14,10 +14,10 @@ import { Form, Input, Textarea, Select, Button, Submit } from 'react-functional-
 export default ({ onSubmit, onCancel }) => (
   <Form>
     <label>Name</label>
-    <Input name="name" />
+    <Input name="name" required minlength="5" maxlength="50" />
     
     <label>Description</label>
-    <Textarea name="description" />
+    <Textarea name="description" maxlength="100" />
     
     <label>Type</label>
     <Select name="type" options={['One', 'Two']}>
