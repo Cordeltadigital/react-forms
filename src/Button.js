@@ -6,22 +6,25 @@ export default function createButtonComponent(submit) {
   return class extends Component {
     state = { executing: false }
 
-    onButtonClick = e => {
-      this.executeHandler(e.target.closest('form'))
-      e.preventDefault()
-    }
+    onButtonClick = e => this.executeHandler(e.target.closest('form'), e)
 
-    executeHandler = form => {
+    executeHandler = (form, e) => {
       const { onClick, values, setValidated } = this.props
 
-      setValidated()
-      if(form.checkValidity()) {
-        const clickResponse = onClick(values)
-        if(clickResponse instanceof Promise) {
-          this.setState({ executing: true })
-          clickResponse.finally(() => this.setState({ executing: false }))
+      if(submit) {
+        setValidated()
+        if (form.checkValidity()) {
+          const clickResponse = onClick(values)
+          if (clickResponse instanceof Promise) {
+            this.setState({executing: true})
+            clickResponse.finally(() => this.setState({executing: false}))
+          }
         }
+      } else {
+        onClick(values)
       }
+
+      e.preventDefault()
     }
 
     attachSubmitHandler = button => {
@@ -29,10 +32,7 @@ export default function createButtonComponent(submit) {
         const element = findDOMNode(button)
         if(element) {
           const form = element.closest('form')
-          form.addEventListener('submit', e => {
-            this.executeHandler(form)
-            e.preventDefault()
-          })
+          form.addEventListener('submit', e => this.executeHandler(form, e))
         }
       }
     }
@@ -41,10 +41,14 @@ export default function createButtonComponent(submit) {
       if(!this.props.onClick || typeof this.props.onClick !== 'function') throw new Error('You must provide an onClick function prop to the Button component')
       if(!this.props.values) throw new Error('You must consume the Button component through the form/index.js module')
 
+      const { setValue, setValidated, values, ...propsToPass} = this.props
+      const className = (this.state.validated ? 'validated ' : '') + this.props.className
+
       return (
         <button
-          className={this.props.className} 
-          onClick={this.onButtonClick} 
+          {...propsToPass}
+          className={className}
+          onClick={this.onButtonClick}
           disabled={this.state.executing}
           ref={this.attachSubmitHandler}
         >

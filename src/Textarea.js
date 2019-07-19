@@ -12,11 +12,13 @@ export default class extends Component {
   render() {
     if(!this.props.name) throw new Error('You must provide a name prop to the Textarea component')
     if(!this.props.setValue) throw new Error('You must consume the Textarea component through the form/index.js module')
-    
-    return <textarea 
-      name={this.props.name}
-      required={this.props.required}
-      className={'textarea' + (this.state.validated ? ' validated' : '')}
+
+    const { setValue, setValidated, values, ...propsToPass} = this.props
+    const className = (this.state.validated ? 'validated ' : '') + this.props.className
+
+    return <textarea
+      {...propsToPass}
+      className={className}
       onChange={this.handleChange} 
     />
   }

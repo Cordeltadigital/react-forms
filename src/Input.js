@@ -21,12 +21,13 @@ export default class extends Component {
     if(!this.props.setValue) throw new Error('You must consume the Input component through the form/index.js module')
 
     const { setValue, setValidated, values, ...propsToPass} = this.props
-    
+    const className = (this.state.validated ? 'validated ' : '') + this.props.className
+
     return <input
-      value={this.props.value || (this.props.name && keyPath(this.props.name, this.props.values)) || ''}
       type="search"
       {...propsToPass}
-      className={this.state.validated ? 'validated' : ''}
+      value={this.props.value || (this.props.name && keyPath(this.props.name, this.props.values)) || ''}
+      className={className}
       onChange={this.handleChange} 
     />
   }

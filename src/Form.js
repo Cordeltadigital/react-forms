@@ -15,8 +15,10 @@ export default (ContextProvider) => class extends Component {
   setValidated = () => this.setState({ validated: true })
 
   render() {
+    const className = (this.state.validated ? 'validated ' : '') + this.props.className
+
     return (
-      <form noValidate className={this.state.validated ? 'validated' : ''}>
+      <form noValidate {...this.props} className={className}>
         <ContextProvider {...this.props} value={{ 
           setValue: this.setValue, 
           values: this.state.values,

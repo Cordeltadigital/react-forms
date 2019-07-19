@@ -13,20 +13,14 @@ import { Form, Input, Textarea, Select, Button, Submit } from 'react-functional-
 
 export default ({ onSubmit, onCancel }) => (
   <Form>
-    <div>
-      <label>Name</label>
-      <Input name="name" required minlength="5" maxlength="50" />
-    </div>
-    
-    <div>
-      <label>Description</label>
-      <Textarea name="description" maxlength="100" />
-    </div>
-    
-    <div>
-      <label>Type</label>
-      <Select name="type" options={['One', 'Two']}>
-    </div>
+    <label>Name</label>
+    <Input name="name" required minlength="5" maxlength="50" />
+
+    <label>Description</label>
+    <Textarea name="description" maxlength="100" />
+
+    <label>Type</label>
+    <Select name="type" options={['One', 'Two']}>
     
     <Submit onClick={onSubmit}>Submit</Submit>
     <Button onClick={onCancel}>Cancel</Button>
@@ -72,3 +66,33 @@ elements are active.
 
 If a promise is returned from the `onClick` handler, the button is disabled and a simple SVG spinner is displayed until
 the promise resolves or rejects.
+
+All `props` passed to components are passed to underlying HTML elements.
+
+## Styling
+
+No styling is provided out of the box. Default corresponding HTML elements are used and can be directly styled using 
+CSS or style attributes.
+
+Additionally, a `validated` class is applied to individual elements as they change, and to the form when it is
+submitted. This allows you to make use of the `:invalid` pseudo-class, but only display validation styles after
+validation has occurred.
+
+Styling to work with the example code above might look something like:
+
+```css
+form > * {
+  display: block;
+}
+
+form label {
+  font-size: 0.8em;
+}
+
+/* style all invalid elements when the form is submitted */
+form.validated *:invalid, 
+/* style individual invalid elements as they change */
+form *.validated:invalid {
+  border: 2px solid red;
+}
+```
