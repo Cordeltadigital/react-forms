@@ -26,6 +26,9 @@ test("elements are rendered and values passed to onClick handler", () => {
   }]])
 })
 
+// test("initial values are set and can be changed", () => {
+//   FAILS!!! Initial values are not passed to submit handlers
+// })
 // test("values provides an accessor to form values", () => {})
 // test("button displays spinner until promise returned from onClick completes", () => {})
 // test("passing value prop to consumers sets initial value", () => {})

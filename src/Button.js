@@ -53,7 +53,7 @@ export default function createButtonComponent(submit) {
           ref={this.attachSubmitHandler}
         >
           {this.props.children}
-          {spinner}
+          {this.state.executing && spinner}
         </button>
       )
     }

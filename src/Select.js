@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {keyPath} from "./keyPath";
 
 export default class extends Component {
   state = { validated: false }
@@ -8,7 +9,7 @@ export default class extends Component {
     if(!this.props.setValue) throw new Error('You must consume the Select component through the form/index.js module')
     if(!this.props.options) throw new Error('You must provide an array of options to the Select component')
 
-    this.props.setValue(this.props.name, this.props.initialValue || this.props.options[0])
+    this.props.setValue(this.props.name, this.props.value || this.props.options[0])
   }
 
   handleChange = event => {
@@ -23,9 +24,11 @@ export default class extends Component {
   render() {
     const { setValue, setValidated, values, ...propsToPass} = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
+    const value = keyPath(this.props.name, this.props.values) || this.props.value || ''
 
     return <select
       {...propsToPass}
+      value={value}
       className={className}
       onChange={this.handleChange} 
     >

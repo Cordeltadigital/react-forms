@@ -30,7 +30,8 @@ export default ({ onSubmit, onCancel }) => (
 
 All `props` passed to components are passed to underlying HTML elements.
 
-`onSubmit` handler is passed an object containing form values, in this case:
+Submit component `onClick` handlers are passed an object containing validated form values, in this case a structure 
+like:
 
 ```json
 {
