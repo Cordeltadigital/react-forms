@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {keyPath} from "./keyPath";
+import { keyPath } from './keyPath'
 
 export default class extends Component {
   state = { validated: false }

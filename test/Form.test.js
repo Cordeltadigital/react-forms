@@ -38,3 +38,6 @@ test("elements are rendered and values passed to onClick handler", () => {
 // test("object key path can be used to construct deep object")
 // test("arbitrary props are passed to corresponding HTML elements")
 // test("non-submit button onClick handler does not validate and receives unvalidated values")
+// test("radio buttons set value correctly")
+// test("radio buttons set initial value from checked attribute")
+// test("radio buttons validate required attribute")

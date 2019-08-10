@@ -10,33 +10,42 @@ export default class extends Component {
     if(!props.name) throw new Error('You must provide a name prop to the Input component')
     if(!props.setValue) throw new Error('The Input component must be contained within a Form component')
 
-    if(props.value) {
+    if(props.type === 'radio' ? props.checked : props.value) {
       props.setValue(props.name, props.value)
     }
   }
 
   handleChange = event => {
-    if(this.props.name) {
-      const value = this.props.type === 'number' ? +event.target.value : event.target.value
-      this.props.setValue(this.props.name, value)
+    const { name, type, value, numeric, setValue, onChange } = this.props
+
+    if(name) {
+      const elementValue = type === 'radio' ? value : event.target.value
+      const finalValue = (type === 'number' || numeric) ? +elementValue : elementValue
+
+      setValue(name, finalValue)
       event.target.checkValidity()
       this.setState({ validated: true })
     }
 
-    if(this.props.onChange) {
-      this.props.onChange(event)
+    if(onChange) {
+      onChange(event)
     }
   }
 
   render() {
-    const { setValue, setValidated, values, ...propsToPass} = this.props
+    const { setValue, setValidated, values, type, checked, ...propsToPass } = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
-    const value = keyPath(this.props.name, this.props.values) || this.props.value || ''
+
+    const currentValue = keyPath(this.props.name, this.props.values)
+    const formValue = currentValue || this.props.value || ''
+    const elementValue = type === 'radio' ? this.props.value : formValue
+    const checkedValue = type === 'radio' && { checked: String(elementValue) === String(currentValue) }
 
     return <input
-      type="search"
       {...propsToPass}
-      value={value}
+      {...checkedValue}
+      type={type || "search"}
+      value={elementValue}
       className={className}
       onChange={this.handleChange} 
     />
