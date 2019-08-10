@@ -16,8 +16,8 @@ export default function createButtonComponent(submit) {
         if (form.checkValidity()) {
           const clickResponse = onClick(values)
           if (clickResponse instanceof Promise) {
-            this.setState({executing: true})
-            clickResponse.finally(() => this.setState({executing: false}))
+            this.setState({ executing: true })
+            clickResponse.finally(() => this.setState({ executing: false }))
           }
         }
       } else {

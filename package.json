@@ -26,8 +26,8 @@
     "react-dom": "^16.8.3"
   },
   "jest": {
-    "moduleNameMapper": { "\\.css$": "<rootDir>/test/styleMock.js" },
-    "setupFilesAfterEnv": ["<rootDir>test/setup.js"]
+    "moduleNameMapper": { "\\.css$": "<rootDir>/test/setup/styleMock.js" },
+    "setupFilesAfterEnv": ["<rootDir>test/setup/beforeAll.js"]
   },
   "babel": {
     "presets": ["@babel/preset-env", "@babel/preset-react"],

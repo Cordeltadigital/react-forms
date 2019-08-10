@@ -1,43 +1,87 @@
 import React from 'react'
-import enzyme from 'enzyme'
-import { Form, Input, Textarea, Select, Submit } from "../src";
+import { createSetup } from './setup'
+import { Form, Input, Textarea, Select, Submit, Button } from "../src";
 
-test("elements are rendered and values passed to onClick handler", () => {
-  const spy = jest.fn()
-  const form = enzyme.mount(
+const simpleForm = createSetup(({ props, spy }) =>
+  <Form>
+    <Input name="text" {...props} />
+    <Submit onClick={spy} />
+  </Form>
+)
+const delay = () => new Promise(r => setTimeout(r))
+
+test("multiple elements", () => {
+  const { change, submit, validateCalls } = createSetup(({ spy }) =>
     <Form>
       <Input name="input" />
       <Textarea name="textarea" />
       <Select name="select" options={['select']} />
       <Submit onClick={spy} />
     </Form>
-  )
+  )()
 
-  form.find('input[name="input"]').instance().value = 'input'
-  form.find('input[name="input"]').simulate('change')
-  form.find('textarea').instance().value = 'textarea'
-  form.find('textarea').simulate('change')
-  form.find('button').simulate('click')
+  change('input', 'input', 'input')
+  change('textarea', 'textarea', 'textarea')
+  submit()
 
-  expect(spy.mock.calls).toEqual([[{
+  validateCalls({
     input: 'input',
     textarea: 'textarea',
     select: 'select'
-  }]])
+  })
 })
 
-// test("initial values are set and can be changed", () => {
-//   FAILS!!! Initial values are not passed to submit handlers
+test("validated class is appended to invalid form className when submitted", () => {
+  const { submit, form } = simpleForm({ required: true })
+  submit()
+  expect(form.find('form').props().className).toContain('validated')
+})
+
+// need to move the submission handler to Form and make buttons dumb
+// I can't get this to work anyway - maybe related to https://github.com/airbnb/enzyme/issues/308 or https://github.com/airbnb/enzyme/issues/1722
+// test("submit button fires onClick when form is submitted", () => {
+//   const { form, validateCalls } = simpleForm()
+//   form.find('form').simulate('submit')
+//   validateCalls({})
 // })
-// test("values provides an accessor to form values", () => {})
-// test("button displays spinner until promise returned from onClick completes", () => {})
-// test("passing value prop to consumers sets initial value", () => {})
-// test("html validation attributes prevent onClick handler from firing if invalid", () => {})
-// test("validated class is appended to invalid element className", () => {})
-// test("submit button fires onClick when enter is pressed while form is focused", () => {})
-// test("object key path can be used to construct deep object")
-// test("arbitrary props are passed to corresponding HTML elements")
-// test("non-submit button onClick handler does not validate and receives unvalidated values")
-// test("radio buttons set value correctly")
-// test("radio buttons set initial value from checked attribute")
-// test("radio buttons validate required attribute")
+
+test("object key path can be used to construct deep object", () => {
+  const { submit, validateCalls } = simpleForm({ name: 'p1.p2', value: 'test' })
+  submit()
+  validateCalls({ p1: { p2: 'test' } })
+})
+
+test("non-submit button onClick handler does not validate and receives unvalidated values", () => {
+  const { submit, validateCalls } = createSetup(({ spy }) =>
+    <Form>
+      <Input name="text" required />
+      <Button onClick={spy} />
+    </Form>
+  )()
+  submit()
+  validateCalls({})
+})
+
+// test("button displays spinner until promise returned from onClick completes", () => {
+//   let resolve
+//   const handler = spy => () => (new Promise(r => resolve = r)).then(spy)
+//   const { submit, validateCalls, form } = createSetup(({ spy }) =>
+//     <Form>
+//       <Input name="text" value="test" />
+//       <Button onClick={handler(spy)} />
+//     </Form>
+//   )()
+//
+//   submit()
+//   validateCalls()
+//
+//   // not sure why this fails yet - pretty sure it's working, but webstorm is not letting me debug enzyme tests at the moment...
+//   expect(form.find('svg').length).toBe(1)
+//
+//   resolve()
+//   return delay().then(() => {
+//     validateCalls(undefined)
+//     expect(form.find('svg').length).toBe(0)
+//   })
+// })
+

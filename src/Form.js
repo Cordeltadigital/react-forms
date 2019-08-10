@@ -11,10 +11,7 @@ export default (ContextProvider) => class extends Component {
     this.setState({ values: values || this.state.values || {} })
   }
 
-  // this is really a bit nasty - the following should say `keyPath.set(name, ...this.state.values, value)`
-  // but unfortunately, this means the initial value is not passed to the submit handler
-  // if this causes you issues, file an issue and give me a hard time haha
-  setValue = (name, value) => this.setState({ values: keyPath.set(name, this.state.values, value) })
+  setValue = (name, value) => this.setState({ values: keyPath.set(name, { ...this.state.values }, value) })
   setValidated = () => this.setState({ validated: true })
 
   render() {
