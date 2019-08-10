@@ -36,6 +36,7 @@ export default render => class extends Component {
     const { setValue, setValidated, values, type, checked, ...propsToPass } = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
+    // this is to provide special handling for radio buttons
     const currentValue = keyPath(this.props.name, this.props.values)
     const formValue = currentValue || this.props.value || ''
     const elementValue = type === 'radio' ? this.props.value : formValue

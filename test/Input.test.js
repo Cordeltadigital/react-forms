@@ -61,5 +61,22 @@ test("classes are appended correctly", () => {
   expect(element('input', 'text').props().className).toContain('my-class my-other-class')
 })
 
-// we should write a bunch of tests for radio button special handling if we leave it in
-// test("radio buttons set initial value from checked attribute")
+test("radio buttons set initial value and can be changed", () => {
+  const { form, submit, validateCalls } = createSetup(({ spy }) =>
+    <Form>
+      <Input type="radio" name="value" value="1" checked />
+      <Input type="radio" name="value" value="2" />
+      <Input type="radio" name="value" value="3" />
+      <Submit onClick={spy} />
+    </Form>
+  )()
+
+  submit()
+  form.find('input').at(1).simulate('click')
+  form.find('input').at(1).simulate('change')
+  submit()
+  validateCalls({ value: '1' }, { value: '2' })
+})
+
+// test("radio button required")
+// test("numeric prop")
