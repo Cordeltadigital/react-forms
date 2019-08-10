@@ -25,7 +25,8 @@ test("arbitrary props are passed to element", () => {
     .toMatchObject({ prop1: 'abc', prop2: 2 })
 })
 
-// the initial value is currently set to the first in the list
+// the initial value used to be set to the first in the list to match browser behavior
+// this hasn't been implemented in the new wrapped component world - THIS NEEDS TO BE DONE!
 // test("html validation attributes prevent onClick handler from firing if invalid", () => {
 //   const { submit, change, validateCalls } = setup({ required: true })
 //

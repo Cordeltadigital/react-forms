@@ -22,6 +22,7 @@ test("multiple elements", () => {
 
   change('input', 'input', 'input')
   change('textarea', 'textarea', 'textarea')
+  change('select', 'select', 'select')
   submit()
 
   validateCalls({
@@ -62,6 +63,7 @@ test("non-submit button onClick handler does not validate and receives unvalidat
   validateCalls({})
 })
 
+// debatable whether we should be doing this?
 // test("button displays spinner until promise returned from onClick completes", () => {
 //   let resolve
 //   const handler = spy => () => (new Promise(r => resolve = r)).then(spy)

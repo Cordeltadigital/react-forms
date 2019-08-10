@@ -1,10 +1,7 @@
 import React, { createContext, createElement } from 'react'
 import FormProvider from './Form'
-import InputConsumer from './Input'
-import SelectConsumer from './Select'
 import ButtonConsumer from './Button'
-import TextareaConsumer from './Textarea'
-import ValuesConsumer from './Values'
+import wrap from './wrap'
 
 const context = createContext()
 
@@ -15,9 +12,13 @@ const createConsumer = ConsumerComponent => props => (
 )
 
 export const Form = FormProvider(context.Provider)
-export const Input = props => createConsumer(InputConsumer)(props)
-export const Select = createConsumer(SelectConsumer)
 export const Button = createConsumer(ButtonConsumer(false))
 export const Submit = createConsumer(ButtonConsumer(true))
-export const Textarea = createConsumer(TextareaConsumer)
-export const Values = createConsumer(ValuesConsumer)
+
+export const Input = props => createConsumer(wrap(props => <input {...props} />))(props)
+export const Textarea = createConsumer(wrap(props => <textarea {...props} />))
+export const Select = createConsumer(wrap(props =>
+  <select {...props}>
+    {props.options.map(x => <option value={x} key={x}>{x}</option> )}
+  </select>
+))

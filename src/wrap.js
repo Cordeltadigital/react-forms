@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { keyPath } from './keyPath'
 
-export default class extends Component {
+export default render => class extends Component {
   state = { validated: false }
 
   constructor(props) {
@@ -41,13 +41,15 @@ export default class extends Component {
     const elementValue = type === 'radio' ? this.props.value : formValue
     const checkedValue = type === 'radio' && { checked: String(elementValue) === String(currentValue) }
 
-    return <input
-      {...propsToPass}
-      {...checkedValue}
-      type={type || "search"}
-      value={elementValue}
-      className={className}
-      onChange={this.handleChange} 
-    />
+    const finalProps = {
+      ...checkedValue,
+      ...propsToPass,
+      type,
+      value: elementValue,
+      className,
+      onChange: this.handleChange
+    }
+
+    return render(finalProps)
   }
 }
