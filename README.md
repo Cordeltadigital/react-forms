@@ -41,8 +41,8 @@ is only called if validation passes.
 }
 ```
 
-Simple dotted notation can be used to create deep object structures, and using `type="number"` will coerce the provided 
-value to a Number type:
+Simple dotted notation can be used to create deep object structures, and using `type="number"` or adding a `numeric` 
+prop will coerce the provided value to a Number type:
 
 ```jsx
 <Form>
