@@ -7,8 +7,8 @@ export default render => class extends Component {
   constructor(props) {
     super(props)
 
-    if(!props.name) throw new Error('You must provide a name prop to the Input component')
-    if(!props.setValue) throw new Error('The Input component must be contained within a Form component')
+    if(!props.name) throw new Error('You must provide a name prop to form component')
+    if(!props.setValue) throw new Error('Input components must be contained within a Form component')
 
     if(props.type === 'radio' ? props.checked : props.value) {
       props.setValue(props.name, props.value)
@@ -36,7 +36,7 @@ export default render => class extends Component {
     const { setValue, setValidated, values, type, checked, ...propsToPass } = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
-    // this is to provide special handling for radio buttons
+    // provide special handling for radio buttons
     const currentValue = keyPath(this.props.name, this.props.values)
     const formValue = currentValue || this.props.value || ''
     const elementValue = type === 'radio' ? this.props.value : formValue
