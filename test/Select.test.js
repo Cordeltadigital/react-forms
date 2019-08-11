@@ -5,7 +5,7 @@ import { Form, Select, Submit } from '../src'
 const setup = createSetup(({ props, spy }) => (
   <Form>
     <Select name="value" options={['1', '2', '3']} {...props} />
-    <Submit onClick={spy} />
+    <Submit onSubmit={spy} />
   </Form>
 ))
 

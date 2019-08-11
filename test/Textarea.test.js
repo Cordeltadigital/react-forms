@@ -5,7 +5,7 @@ import { Form, Textarea, Submit } from '../src'
 const setup = createSetup(({ props, spy }) => (
   <Form>
     <Textarea name="text" {...props} />
-    <Submit onClick={spy} />
+    <Submit onSubmit={spy} />
   </Form>
 ))
 

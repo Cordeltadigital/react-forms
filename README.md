@@ -96,3 +96,29 @@ form *.validated:invalid {
   border: 2px solid red;
 }
 ```
+
+## Custom Components
+
+`react-functional-forms` exposes a `wrap` function that can be used to wrap components so that they can be included in 
+output form value objects.
+
+```javascript
+const InputField = wrap(({ onChange, name, label, value, required, className }) =>
+  <div className={className}>
+    <label>{label}</label>
+    <input name={name} onChange={onChange} value={value} required={required} />
+  </div>
+)
+
+export const SampleForm = ({ onSubmit }) => (
+
+  <Form>
+    <InputField label="Text" name="text" {...props} />
+    <Submit onSubmit={onSubmit} />
+  </Form>
+)
+```
+
+## Integration With Third Party Libraries
+
+The `wrap` function described above can also be used to wrap components from third party libraries . 

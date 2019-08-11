@@ -5,7 +5,7 @@ import { Form, Input, Textarea, Select, Submit, Button } from "../src";
 const simpleForm = createSetup(({ props, spy }) =>
   <Form>
     <Input name="text" {...props} />
-    <Submit onClick={spy} />
+    <Submit onSubmit={spy} />
   </Form>
 )
 const delay = () => new Promise(r => setTimeout(r))
@@ -16,7 +16,7 @@ test("multiple elements", () => {
       <Input name="input" />
       <Textarea name="textarea" />
       <Select name="select" options={['select']} />
-      <Submit onClick={spy} />
+      <Submit onSubmit={spy} />
     </Form>
   )()
 

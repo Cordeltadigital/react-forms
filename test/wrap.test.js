@@ -2,19 +2,17 @@ import React from 'react'
 import { Form, Submit, wrap } from '../src'
 import { createSetup } from './setup'
 
-const InputField = wrap(({ onChange, name, label, value, required, className }) => {
-  return (
-    <div className={className}>
-      <label>{label}</label>
-      <input name={name} onChange={onChange} value={value} required={required} />
-    </div>
-  )
-})
+const InputField = wrap(({ onChange, name, label, value, required, className }) =>
+  <div className={className}>
+    <label>{label}</label>
+    <input name={name} onChange={onChange} value={value} required={required} />
+  </div>
+)
 
 const setup = createSetup(({ props, spy }) =>
   <Form>
     <InputField label="Text" name="text" {...props} />
-    <Submit onClick={spy} />
+    <Submit onSubmit={spy} />
   </Form>
 )
 

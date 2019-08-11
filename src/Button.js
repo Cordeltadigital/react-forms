@@ -9,18 +9,18 @@ export default function createButtonComponent(submit) {
     onButtonClick = e => this.executeHandler(e.target.closest('form'), e)
 
     executeHandler = (form, e) => {
-      const { onClick, values, setValidated } = this.props
+      const { onClick, onSubmit, values, setValidated } = this.props
 
       if(submit) {
         setValidated()
         if (form.checkValidity()) {
-          const clickResponse = onClick(values)
+          const clickResponse = onSubmit && onSubmit(values)
           if (clickResponse instanceof Promise) {
             this.setState({ executing: true })
             clickResponse.finally(() => this.setState({ executing: false }))
           }
         }
-      } else {
+      } else if(onClick) {
         onClick(values)
       }
 
@@ -38,10 +38,9 @@ export default function createButtonComponent(submit) {
     }
 
     render() {
-      if(!this.props.onClick || typeof this.props.onClick !== 'function') throw new Error('You must provide an onClick function prop to the Button component')
       if(!this.props.values) throw new Error('You must consume the Button component through the form/index.js module')
 
-      const { setValue, setValidated, values, ...propsToPass} = this.props
+      const { setValue, setValidated, onClick, values, children, ...propsToPass} = this.props
       const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
       return (
@@ -52,7 +51,7 @@ export default function createButtonComponent(submit) {
           disabled={this.state.executing}
           ref={this.attachSubmitHandler}
         >
-          {this.props.children}
+          {children}
           {this.state.executing && spinner}
         </button>
       )

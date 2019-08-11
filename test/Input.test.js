@@ -5,7 +5,7 @@ import { Form, Input, Submit } from '../src'
 const setup = createSetup(({ props, spy }) => (
   <Form>
     <Input name="text" {...props} />
-    <Submit onClick={spy} />
+    <Submit onSubmit={spy} />
   </Form>
 ))
 
@@ -67,7 +67,7 @@ test("radio buttons set initial value and can be changed", () => {
       <Input type="radio" name="value" value="1" checked />
       <Input type="radio" name="value" value="2" />
       <Input type="radio" name="value" value="3" />
-      <Submit onClick={spy} />
+      <Submit onSubmit={spy} />
     </Form>
   )()
 
