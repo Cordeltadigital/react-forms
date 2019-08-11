@@ -22,7 +22,7 @@ export default ({ onSubmit, onCancel }) => (
     <label>Type</label>
     <Select name="type" options={['One', 'Two']}>
     
-    <Submit onClick={onSubmit}>Submit</Submit>
+    <Submit onSubmit={onSubmit}>Submit</Submit>
     <Button onClick={onCancel}>Cancel</Button>
   </Form>
 )
@@ -30,8 +30,8 @@ export default ({ onSubmit, onCancel }) => (
 
 All `props` passed to components are passed to underlying HTML elements.
 
-Submit component `onClick` handlers are passed an object containing validated form values, in this case a structure 
-like:
+The Submit `onSubmit` and Button `onClick` handlers are passed an object containing validated form values. `onSubmit`
+is only called if validation passes.
 
 ```json
 {
@@ -49,7 +49,7 @@ value to a Number type:
   <Input name="name" />
   <Input name="inventory.stockLevel" type="number" />
   <Input name="inventory.quantityOnOrder" type="number" />
-  <Submit onClick={values => console.log(values)} />
+  <Submit onSubmit={values => console.log(values)} />
 </Form>
 ```
 
@@ -63,10 +63,10 @@ value to a Number type:
 }
 ```
 
-The `onClick` handler passed to the `Submit` component will also be triggered when the `enter` key is pressed while form 
-elements are active.
+The `onSubmit` handler passed to the `Submit` component will also be triggered when the `enter` key is pressed while 
+form elements are active.
 
-If a promise is returned from the `onClick` handler, the button is disabled and a simple SVG spinner is displayed until
+If a promise is returned from the `onSubmit` handler, the button is disabled and a simple SVG spinner is displayed until
 the promise resolves or rejects.
 
 ## Styling
@@ -102,18 +102,21 @@ form *.validated:invalid {
 `react-functional-forms` exposes a `wrap` function that can be used to wrap components so that they can be included in 
 output form value objects.
 
-```javascript
-const InputField = wrap(({ onChange, name, label, value, required, className }) =>
+```jsx harmony
+import React from 'react'
+import { wrap, Form, Submit } from 'react-functional-forms'
+
+const InputField = wrap(({ onChange, name, label, required, className }) =>
   <div className={className}>
     <label>{label}</label>
-    <input name={name} onChange={onChange} value={value} required={required} />
+    <input name={name} onChange={onChange} required={required} />
   </div>
 )
 
 export const SampleForm = ({ onSubmit }) => (
-
   <Form>
-    <InputField label="Text" name="text" {...props} />
+    <InputField label="Name" name="name" required />
+    <InputField label="Description" name="description" />
     <Submit onSubmit={onSubmit} />
   </Form>
 )
@@ -121,4 +124,8 @@ export const SampleForm = ({ onSubmit }) => (
 
 ## Integration With Third Party Libraries
 
-The `wrap` function described above can also be used to wrap components from third party libraries . 
+The `wrap` function described above can also be used to wrap components from third party libraries. 
+
+```jsx harmony
+
+```
