@@ -28,7 +28,7 @@ test("custom component can be wrapped", () => {
   validateCalls({ text: 'initial' }, { text: 'changed' })
 })
 
-test("arbitrary props are passed to element", () => {
+test("arbitrary props are passed to custom component", () => {
   const { form } = setup({ prop1: 'abc', prop2: 2 })
   expect(form.find(InputField).props()).toMatchObject({ prop1: 'abc', prop2: 2 })
 })
@@ -45,13 +45,13 @@ test("html validation attributes prevent onClick handler from firing if invalid"
   validateCalls({ text: 'changed' })
 })
 
-test("validated class is appended to element class when changed", () => {
+test("validated is appended to custom component className when changed", () => {
   const { change, form } = setup({ required: true })
   change('input', 'text')
   expect(form.find('div').hasClass('validated')).toBe(true)
 })
 
-test("classes are appended correctly", () => {
+test("classes are appended correctly to custom component className", () => {
   const { form } = setup({ className: 'my-class my-other-class' })
   expect(form.find('div').hasClass('my-class my-other-class')).toBe(true)
 })
