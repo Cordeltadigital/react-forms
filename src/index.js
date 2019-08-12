@@ -25,4 +25,4 @@ export const Select = createConsumer(input(props =>
 ))
 
 export const wrapInput = component => createConsumer(input(props => createElement(component, props)))
-export const wrapButton = component => createConsumer(button(props => createElement(component, props)))
+export const wrapButton = component => createConsumer(button(props => createElement(component, props), true))

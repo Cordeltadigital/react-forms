@@ -61,6 +61,14 @@ test("classes are appended correctly", () => {
   expect(element('input', 'text').props().className).toContain('my-class my-other-class')
 })
 
+test("initial value can be set using defaultValue prop", () => {
+  const { submit, validateCalls } = setup({ defaultValue: 'initial' })
+  submit()
+  validateCalls({ text: 'initial' })
+})
+
+
+// radio buttons
 test("radio buttons set initial value and can be changed", () => {
   const { form, submit, validateCalls } = createSetup(({ spy }) =>
     <Form>

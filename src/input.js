@@ -10,21 +10,35 @@ export default render => class extends Component {
     if(!props.name) throw new Error('You must provide a name prop to form components')
     if(!props.setValue) throw new Error('Input components must be contained within a Form component')
 
-    if(props.type === 'radio' ? props.checked : props.value) {
-      props.setValue(props.name, props.value)
+    if((props.type === 'radio' && props.checked) || props.value || props.defaultValue) {
+      props.setValue(props.name, props.value || props.defaultValue)
     }
   }
 
-  handleChange = event => {
+  handleChange = (event, possibleArgumentValue) => {
     const { name, type, value, numeric, setValue, onChange } = this.props
 
     if(name) {
-      const elementValue = type === 'radio' ? value : event.target.value
-      const finalValue = (type === 'number' || numeric) ? +elementValue : elementValue
+      const getElementValue = () => {
+        if (type === 'radio') {
+          return value
+        } else if (event.target && event.target.value) {
+          return event.target.value
+        } else if (event.value) {
+          return event.value
+        } else {
+          // the material-ui library passes the value as a second argument to the event handler
+          return possibleArgumentValue
+        }
+      }
+
+      const finalValue = (type === 'number' || numeric) ? +getElementValue() : getElementValue()
 
       setValue(name, finalValue)
-      event.target.checkValidity()
-      this.setState({ validated: true })
+      if(event.target.checkValidity) {
+        event.target.checkValidity()
+        this.setState({ validated: true })
+      }
     }
 
     if(onChange) {
@@ -33,7 +47,7 @@ export default render => class extends Component {
   }
 
   render() {
-    const { setValue, setValidated, values, type, checked, ...propsToPass } = this.props
+    const { setValue, setValidated, values, type, checked, defaultValue, ...propsToPass } = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
 
     // provide special handling for radio buttons
