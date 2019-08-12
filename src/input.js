@@ -7,7 +7,7 @@ export default render => class extends Component {
   constructor(props) {
     super(props)
 
-    if(!props.name) throw new Error('You must provide a name prop to form component')
+    if(!props.name) throw new Error('You must provide a name prop to form components')
     if(!props.setValue) throw new Error('Input components must be contained within a Form component')
 
     if(props.type === 'radio' ? props.checked : props.value) {

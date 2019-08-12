@@ -62,28 +62,3 @@ test("non-submit button onClick handler does not validate and receives unvalidat
   submit()
   validateCalls({})
 })
-
-// debatable whether we should be doing this?
-// test("button displays spinner until promise returned from onClick completes", () => {
-//   let resolve
-//   const handler = spy => () => (new Promise(r => resolve = r)).then(spy)
-//   const { submit, validateCalls, form } = createSetup(({ spy }) =>
-//     <Form>
-//       <Input name="text" value="test" />
-//       <Button onClick={handler(spy)} />
-//     </Form>
-//   )()
-//
-//   submit()
-//   validateCalls()
-//
-//   // not sure why this fails yet - pretty sure it's working, but webstorm is not letting me debug enzyme tests at the moment...
-//   expect(form.find('svg').length).toBe(1)
-//
-//   resolve()
-//   return delay().then(() => {
-//     validateCalls(undefined)
-//     expect(form.find('svg').length).toBe(0)
-//   })
-// })
-

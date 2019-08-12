@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import { findDOMNode } from 'react-dom'
-import spinner from './spinner'
 
 export default (render, submit) => class extends Component {
   state = { executing: false }
 
   onButtonClick = e => this.executeHandler(e.target.closest('form'), e)
+
+  componentDidMount() {
+    if(submit) {
+      const element = findDOMNode(this)
+      if(element) {
+        const form = element.closest('form')
+        form.addEventListener('submit', e => this.executeHandler(form, e))
+      }
+    }
+  }
 
   executeHandler = (form, e) => {
     const { onClick, onSubmit, values, setValidated } = this.props
@@ -26,18 +35,8 @@ export default (render, submit) => class extends Component {
     e.preventDefault()
   }
 
-  attachSubmitHandler = button => {
-    if(submit) {
-      const element = findDOMNode(button)
-      if(element) {
-        const form = element.closest('form')
-        form.addEventListener('submit', e => this.executeHandler(form, e))
-      }
-    }
-  }
-
   render() {
-    if(!this.props.values) throw new Error('You must consume the Button component through the form/index.js module')
+    if(!this.props.values) throw new Error('Button components must be contained within a Form component')
 
     const { setValue, setValidated, onClick, values, children, ...propsToPass} = this.props
     const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
@@ -47,22 +46,9 @@ export default (render, submit) => class extends Component {
       children,
       className,
       onClick: this.onButtonClick,
-      disabled: !!this.state.executing,
-      ref: this.attachSubmitHandler
+      disabled: !!this.state.executing
     }
-    return render(finalProps)
 
-    // return (
-    //   <button
-    //     {...propsToPass}
-    //     className={className}
-    //     onClick={this.onButtonClick}
-    //     disabled={this.state.executing}
-    //     ref={this.attachSubmitHandler}
-    //   >
-    //     {children}
-    //     {this.state.executing && spinner}
-    //   </button>
-    // )
+    return render(finalProps)
   }
 }
