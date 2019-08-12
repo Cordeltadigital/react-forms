@@ -49,3 +49,42 @@ test("classes are appended correctly", () => {
   const { element } = setup({ className: 'my-class my-other-class' })
   expect(element('select', 'value').props().className).toContain('my-class my-other-class')
 })
+
+test("standard options can be used", () => {
+  const { submit, change, validateCalls } = createSetup(({ spy }) => (
+    <Form>
+      <Select name="value" value="1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </Select>
+      <Submit onSubmit={spy} />
+    </Form>
+  ))()
+
+  submit()
+  change('select', 'value', '2')
+  submit()
+
+  validateCalls({ value: '1' }, { value: '2' })
+})
+
+test("value attribute can be used", () => {
+  const { submit, change, validateCalls } = createSetup(({ spy }) => (
+    <Form>
+      <Select name="value" value="1">
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </Select>
+      <Submit onSubmit={spy} />
+    </Form>
+  ))()
+
+  submit()
+  change('select', 'value', '2')
+  submit()
+
+  validateCalls({ value: '1' }, { value: '2' })
+})
+

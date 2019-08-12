@@ -1,7 +1,7 @@
 import React, { createContext, createElement } from 'react'
 import FormProvider from './Form'
-import ButtonConsumer from './Button'
-import wrapRender from './wrap'
+import button from './button'
+import input from './input'
 
 const context = createContext()
 
@@ -12,15 +12,17 @@ const createConsumer = ConsumerComponent => props => (
 )
 
 export const Form = FormProvider(context.Provider)
-export const Button = createConsumer(ButtonConsumer(false))
-export const Submit = createConsumer(ButtonConsumer(true))
+export const Button = createConsumer(button(props => <button {...props} />, false))
+export const Submit = createConsumer(button(props => <button {...props} />, true))
 
-export const Input = props => createConsumer(wrapRender(props => <input {...props} />))(props)
-export const Textarea = createConsumer(wrapRender(props => <textarea {...props} />))
-export const Select = createConsumer(wrapRender(props =>
+export const Input = props => createConsumer(input(props => <input {...props} />))(props)
+export const Textarea = createConsumer(input(props => <textarea {...props} />))
+export const Select = createConsumer(input(props =>
   <select {...props}>
-    {props.options.map(x => <option value={x} key={x}>{x}</option> )}
+    {props.options && props.options.map(x => <option value={x} key={x}>{x}</option> )}
+    {props.children}
   </select>
 ))
 
-export const wrap = component => createConsumer(wrapRender(props => createElement(component, props)))
+export const wrapInput = component => createConsumer(input(props => createElement(component, props)))
+export const wrapButton = component => createConsumer(button(props => createElement(component, props)))

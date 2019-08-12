@@ -1,8 +1,8 @@
 import React from 'react'
-import { Form, Submit, wrap } from '../src'
+import { Form, Submit, wrapInput } from '../src'
 import { createSetup } from './setup'
 
-const InputField = wrap(({ onChange, name, label, value, required, className }) =>
+const InputField = wrapInput(({ onChange, name, label, value, required, className }) =>
   <div className={className}>
     <label>{label}</label>
     <input name={name} onChange={onChange} value={value} required={required} />
