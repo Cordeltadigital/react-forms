@@ -68,6 +68,7 @@ test("initial value can be set using defaultValue prop", () => {
 })
 
 // test("numeric prop")
+// test("error prop")
 
 
 // radio buttons

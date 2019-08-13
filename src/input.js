@@ -11,8 +11,8 @@ export default (render, { passErrorProp } = {}) => props => {
   const [error, setError] = useState(false)
   const [id] = useState(elementId(nextId()))
 
-  const updateValidationState = validated => {
-    setFieldValidated(validated)
+  const updateValidationState = () => {
+    setFieldValidated(true)
     // this is a little hacky, but the simplest way I could think of to
     // determine the validity of the actual input element
     setError(Boolean(document.querySelector(`#${id}:invalid`)))
@@ -55,7 +55,7 @@ export default (render, { passErrorProp } = {}) => props => {
 
     if(event.target.checkValidity) {
       event.target.checkValidity()
-      updateValidationState(true)
+      updateValidationState()
     }
 
     if(onChange) {
@@ -64,18 +64,17 @@ export default (render, { passErrorProp } = {}) => props => {
   }
 
   const {
-    type, name, value,
-    checked, defaultValue, onSubmit,
-    registerFieldValidator, setFieldValue, getFieldValue,
+    type, name, value, checked, defaultValue,
+    onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
     ...passThroughProps
   } = props
 
   const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
   const currentValue = props.getFieldValue(name)
+  const elementValue = type === 'radio' ? value : currentValue
   const checkedProp = type === 'radio' && { checked: value === currentValue }
   const errorProp = passErrorProp && { error }
-  const elementValue = type === 'radio' ? value : currentValue
 
   const finalProps = {
     ...passThroughProps,
@@ -86,8 +85,7 @@ export default (render, { passErrorProp } = {}) => props => {
     name,
     value: elementValue || '',
     className,
-    onChange,
-    // error
+    onChange
   }
 
   return render(finalProps)
