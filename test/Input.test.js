@@ -3,9 +3,9 @@ import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
 
 const setup = createSetup(({ props, spy }) => (
-  <Form>
+  <Form onSubmit={spy}>
     <Input name="text" {...props} />
-    <Submit onSubmit={spy} />
+    <Submit />
   </Form>
 ))
 
@@ -73,11 +73,11 @@ test("initial value can be set using defaultValue prop", () => {
 // radio buttons
 test("radio buttons set initial value and can be changed", () => {
   const { form, submit, validateCalls } = createSetup(({ spy }) =>
-    <Form>
+    <Form onSubmit={spy}>
       <Input type="radio" name="value" value="1" checked />
       <Input type="radio" name="value" value="2" />
       <Input type="radio" name="value" value="3" />
-      <Submit onSubmit={spy} />
+      <Submit />
     </Form>
   )()
 

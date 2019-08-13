@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useReducer, createRef } from 'react'
 import { keyPath } from './keyPath'
 
 export default ContextProvider => props => {
   const [validated, setValidated] = useState(false)
-  const [values, setValues] = useState({})
+  const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), {})
+  const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
+  const form = createRef()
 
-  useEffect(() => props.values && setValues(props.values), [])
+  const getFieldValue = name => fieldValues[name]
+  const getFieldValues = () => Object.keys(fieldValues).reduce(
+    (values, name) => keyPath.set(name, { ...values }, fieldValues[name]),
+    {}
+  )
 
-  const setValue = (name, value) => setValues(keyPath.set(name, { ...values }, value))
-  const getValues = () => values
+  const onSubmit = () => {
+    setValidated(true)
+    fieldValidators.forEach(setFieldValidated => setFieldValidated(true))
+
+    if(form.current.checkValidity() && props.onSubmit) {
+      props.onSubmit(getFieldValues())
+    }
+  }
+
   const className = ((validated ? 'validated ' : '') + (props.className || '') || undefined)
 
   return (
-    <form noValidate {...props} className={className}>
-      <ContextProvider {...props} value={{ setValue, getValues, setValidated }} />
+    <form noValidate {...props} className={className} onSubmit={onSubmit} ref={form}>
+      <ContextProvider {...props} value={{ registerFieldValidator, setFieldValue, getFieldValue, onSubmit }} />
       <input type="submit" style={{ visibility: 'hidden', position: 'absolute' }}/>
     </form>
   )

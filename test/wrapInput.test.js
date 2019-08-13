@@ -10,9 +10,9 @@ const InputField = wrapInput(({ onChange, name, label, value, required, classNam
 )
 
 const setup = createSetup(({ props, spy }) =>
-  <Form>
+  <Form onSubmit={spy}>
     <InputField label="Text" name="text" {...props} />
-    <Submit onSubmit={spy} />
+    <Submit />
   </Form>
 )
 

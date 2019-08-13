@@ -12,10 +12,9 @@ const createConsumer = ConsumerComponent => props => (
 )
 
 export const Form = FormProvider(context.Provider)
-export const Button = createConsumer(button(props => <button {...props} />, false))
-export const Submit = createConsumer(button(props => <button {...props} />, true))
+export const Submit = createConsumer(button(props => <button {...props} />))
 
-export const Input = props => createConsumer(input(props => <input {...props} />))(props)
+export const Input = createConsumer(input(props => <input {...props} />))
 export const Textarea = createConsumer(input(props => <textarea {...props} />))
 export const Select = createConsumer(input(props =>
   <select {...props}>
@@ -25,4 +24,4 @@ export const Select = createConsumer(input(props =>
 ))
 
 export const wrapInput = component => createConsumer(input(props => createElement(component, props)))
-export const wrapButton = component => createConsumer(button(props => createElement(component, props), true))
+export const wrapButton = component => createConsumer(button(props => createElement(component, props)))

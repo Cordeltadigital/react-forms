@@ -5,9 +5,9 @@ import { createSetup } from './setup'
 const AnchorSubmit = wrapButton(props => <a href="#" {...props} />)
 
 const setup = createSetup(({ spy }) =>
-  <Form>
+  <Form onSubmit={spy}>
     <Input name="text" value="initial" />
-    <AnchorSubmit onSubmit={spy}>Submit</AnchorSubmit>
+    <AnchorSubmit>Submit</AnchorSubmit>
   </Form>
 )
 

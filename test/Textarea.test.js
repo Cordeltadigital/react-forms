@@ -3,9 +3,9 @@ import { createSetup } from './setup'
 import { Form, Textarea, Submit } from '../src'
 
 const setup = createSetup(({ props, spy }) => (
-  <Form>
+  <Form onSubmit={spy}>
     <Textarea name="text" {...props} />
-    <Submit onSubmit={spy} />
+    <Submit />
   </Form>
 ))
 
@@ -25,7 +25,7 @@ test("arbitrary props are passed to element", () => {
     .toMatchObject({ prop1: 'abc', prop2: 2 })
 })
 
-test("html validation attributes prevent onClick handler from firing if invalid", () => {
+test("html validation attributes prevent onSubmit handler from firing if invalid", () => {
   const { submit, change, validateCalls } = setup({ required: true })
 
   submit()

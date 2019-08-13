@@ -3,9 +3,9 @@ import { createSetup } from './setup'
 import { Form, Select, Submit } from '../src'
 
 const setup = createSetup(({ props, spy }) => (
-  <Form>
+  <Form onSubmit={spy}>
     <Select name="value" options={['1', '2', '3']} {...props} />
-    <Submit onSubmit={spy} />
+    <Submit />
   </Form>
 ))
 
@@ -52,13 +52,13 @@ test("classes are appended correctly", () => {
 
 test("standard options can be used", () => {
   const { submit, change, validateCalls } = createSetup(({ spy }) => (
-    <Form>
+    <Form onSubmit={spy}>
       <Select name="value" value="1">
         <option>1</option>
         <option>2</option>
         <option>3</option>
       </Select>
-      <Submit onSubmit={spy} />
+      <Submit />
     </Form>
   ))()
 
@@ -71,13 +71,13 @@ test("standard options can be used", () => {
 
 test("value attribute can be used", () => {
   const { submit, change, validateCalls } = createSetup(({ spy }) => (
-    <Form>
+    <Form onSubmit={spy}>
       <Select name="value" value="1">
         <option value="1">One</option>
         <option value="2">Two</option>
         <option value="3">Three</option>
       </Select>
-      <Submit onSubmit={spy} />
+      <Submit />
     </Form>
   ))()
 
