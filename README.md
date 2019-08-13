@@ -35,7 +35,8 @@ export default ({ onSubmit, onCancel }) => (
 )
 ```
 
-All `props` passed to components are passed to underlying HTML elements.
+All `props` passed to components are passed to underlying HTML elements. Standard HTML `option` elements can also be
+used for specifying options for the `Select` component.
 
 ### Submit Semantics
 

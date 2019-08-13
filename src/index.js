@@ -1,18 +1,18 @@
 import React, { createContext, createElement } from 'react'
 import FormProvider from './Form'
-import button from './button'
+import submit from './submit'
 import input from './input'
 
-const context = createContext()
+const context = createContext({})
 
 const createConsumer = ConsumerComponent => props => (
   <context.Consumer>
-    {(context = {}) => createElement(ConsumerComponent, { ...context, ...props })}
+    {context => createElement(ConsumerComponent, { ...context, ...props })}
   </context.Consumer>
 )
 
 export const Form = FormProvider(context.Provider)
-export const Submit = createConsumer(button(props => <button {...props} />))
+export const Submit = createConsumer(submit(props => <button {...props} />))
 
 export const Input = createConsumer(input(props => <input {...props} />))
 export const Textarea = createConsumer(input(props => <textarea {...props} />))
@@ -24,4 +24,4 @@ export const Select = createConsumer(input(props =>
 ))
 
 export const wrapInput = component => createConsumer(input(props => createElement(component, props)))
-export const wrapButton = component => createConsumer(button(props => createElement(component, props)))
+export const wrapButton = component => createConsumer(submit(props => createElement(component, props)))

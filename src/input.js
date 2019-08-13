@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react'
 
+const nextId = (id => () => ++id)(0)
+const elementId = id => `react-functional-forms-${id}`
+
 export default render => props => {
   if (!props.name) throw new Error('You must provide a name prop to form components')
   if (!props.setFieldValue) throw new Error('Input components must be contained within a Form component')
 
   const [fieldValidated, setFieldValidated] = useState(false)
+  const [error, setError] = useState(true)
+  const [id] = useState(elementId(nextId()))
+
+  const updateValidationState = validated => {
+    setFieldValidated(validated)
+    // this is a little hacky, but the simplest way I could think of to
+    // determine the validity of the actual input element
+    setError(!document.querySelector(`#${id}:invalid`))
+  }
 
   useEffect(() => {
     const { type, checked, name, value, defaultValue, setFieldValue, registerFieldValidator } = props
@@ -17,7 +29,7 @@ export default render => props => {
       setFieldValue({ [name]: value || defaultValue })
     }
 
-    registerFieldValidator(setFieldValidated)
+    registerFieldValidator(updateValidationState)
   }, [])
 
   const onChange = (...args) => {
@@ -43,7 +55,7 @@ export default render => props => {
 
     if(event.target.checkValidity) {
       event.target.checkValidity()
-      setFieldValidated(true)
+      updateValidationState(true)
     }
 
     if(onChange) {
@@ -51,7 +63,13 @@ export default render => props => {
     }
   }
 
-  const { type, name, value, checked, defaultValue, onSubmit, registerFieldValidator, setFieldValue, getFieldValue, ...propsToPass } = props
+  const {
+    type, name, value,
+    checked, defaultValue, onSubmit,
+    registerFieldValidator, setFieldValue, getFieldValue,
+    ...passThroughProps
+  } = props
+
   const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
   const currentValue = props.getFieldValue(name)
@@ -59,13 +77,15 @@ export default render => props => {
   const elementValue = type === 'radio' ? value : currentValue
 
   const finalProps = {
-    ...propsToPass,
+    ...passThroughProps,
     ...checkedProp,
-    value: elementValue || '',
+    id,
     type,
     name,
+    value: elementValue || '',
     className,
-    onChange
+    onChange,
+    // error
   }
 
   return render(finalProps)

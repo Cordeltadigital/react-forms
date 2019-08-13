@@ -5,8 +5,8 @@ export default render => props => {
 
   const [executing, setExecuting] = useState(false)
 
-  const onClick = () => {
-    const result = props.onSubmit()
+  const onClick = e => {
+    const result = props.onSubmit(e)
     if(result && result.finally && typeof result.finally === 'function') {
       setExecuting(true)
       result.finally(() => setExecuting(false))

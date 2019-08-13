@@ -13,13 +13,15 @@ export default ContextProvider => props => {
     {}
   )
 
-  const onSubmit = () => {
+  const onSubmit = e => {
     setValidated(true)
     fieldValidators.forEach(setFieldValidated => setFieldValidated(true))
 
     if(form.current.checkValidity() && props.onSubmit) {
       props.onSubmit(getFieldValues())
     }
+
+    e.preventDefault()
   }
 
   const className = ((validated ? 'validated ' : '') + (props.className || '') || undefined)
