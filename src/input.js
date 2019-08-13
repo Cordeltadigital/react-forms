@@ -3,19 +3,19 @@ import React, { useState, useEffect } from 'react'
 const nextId = (id => () => ++id)(0)
 const elementId = id => `react-functional-forms-${id}`
 
-export default render => props => {
+export default (render, { passErrorProp } = {}) => props => {
   if (!props.name) throw new Error('You must provide a name prop to form components')
   if (!props.setFieldValue) throw new Error('Input components must be contained within a Form component')
 
   const [fieldValidated, setFieldValidated] = useState(false)
-  const [error, setError] = useState(true)
+  const [error, setError] = useState(false)
   const [id] = useState(elementId(nextId()))
 
   const updateValidationState = validated => {
     setFieldValidated(validated)
     // this is a little hacky, but the simplest way I could think of to
     // determine the validity of the actual input element
-    setError(!document.querySelector(`#${id}:invalid`))
+    setError(Boolean(document.querySelector(`#${id}:invalid`)))
   }
 
   useEffect(() => {
@@ -74,11 +74,13 @@ export default render => props => {
 
   const currentValue = props.getFieldValue(name)
   const checkedProp = type === 'radio' && { checked: value === currentValue }
+  const errorProp = passErrorProp && { error }
   const elementValue = type === 'radio' ? value : currentValue
 
   const finalProps = {
     ...passThroughProps,
     ...checkedProp,
+    ...errorProp,
     id,
     type,
     name,

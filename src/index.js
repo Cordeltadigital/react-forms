@@ -23,5 +23,5 @@ export const Select = createConsumer(input(props =>
   </select>
 ))
 
-export const wrapInput = component => createConsumer(input(props => createElement(component, props)))
+export const wrapInput = (component, options) => createConsumer(input(props => createElement(component, props), options))
 export const wrapButton = component => createConsumer(submit(props => createElement(component, props)))
