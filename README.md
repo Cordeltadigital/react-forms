@@ -21,6 +21,13 @@ export default ({ onSubmit, onCancel }) => (
 
     <label>Type</label>
     <Select name="type" options={['One', 'Two']}>
+
+    <label>Rating</label>
+    <div>
+      <Input name="rating" type="radio">1</Input>
+      <Input name="rating" type="radio">2</Input>
+      <Input name="rating" type="radio">3</Input>
+    </div>
     
     <Submit onSubmit={onSubmit}>Submit</Submit>
     <Button onClick={onCancel}>Cancel</Button>
@@ -30,8 +37,9 @@ export default ({ onSubmit, onCancel }) => (
 
 All `props` passed to components are passed to underlying HTML elements.
 
-The Submit `onSubmit` and Button `onClick` handlers are passed an object containing validated form values. `onSubmit`
-is only called if validation passes.
+### Submit Semantics
+
+The Submit `onSubmit` and Button `onClick` handlers are passed an object containing form values:
 
 ```json
 {
@@ -40,6 +48,13 @@ is only called if validation passes.
   "type": "One"
 }
 ```
+
+The `onSubmit` handler passed to the `Submit` component is only called if validation passes. The `onClick` handler
+passed to `Button` components does not trigger validation and is passed unvalidated values. 
+
+The `onSubmit` handler will also be triggered when the `enter` key is pressed while form elements are active.
+
+### Deep Object Structures
 
 Simple dotted notation can be used to create deep object structures, and using `type="number"` or adding a `numeric` 
 prop will coerce the provided value to a Number type:
@@ -63,13 +78,7 @@ prop will coerce the provided value to a Number type:
 }
 ```
 
-The `onSubmit` handler passed to the `Submit` component will also be triggered when the `enter` key is pressed while 
-form elements are active.
-
-If a promise is returned from the `onSubmit` handler, the button is disabled and a simple SVG spinner is displayed until
-the promise resolves or rejects.
-
-## Styling
+### Styling
 
 No styling is provided out of the box. Default corresponding HTML elements are used and can be directly styled using 
 CSS or style attributes.
@@ -97,7 +106,7 @@ form *.validated:invalid {
 }
 ```
 
-## Custom Components
+### Custom Components
 
 `react-functional-forms` exposes a `wrap` function that can be used to wrap components so that they can be included in 
 output form value objects.
@@ -122,7 +131,7 @@ export const SampleForm = ({ onSubmit }) => (
 )
 ```
 
-## Integration With Third Party Libraries
+### Integration With Third Party Libraries
 
 The `wrap` function described above can also be used to wrap components from third party libraries. 
 

@@ -67,6 +67,8 @@ test("initial value can be set using defaultValue prop", () => {
   validateCalls({ text: 'initial' })
 })
 
+// test("numeric prop")
+
 
 // radio buttons
 test("radio buttons set initial value and can be changed", () => {
@@ -85,5 +87,6 @@ test("radio buttons set initial value and can be changed", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
+// test("value can be set using children")
 // test("radio button required")
 // test("numeric prop")
