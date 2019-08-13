@@ -10,12 +10,17 @@ export default render => class extends Component {
     if(!props.name) throw new Error('You must provide a name prop to form components')
     if(!props.setValue) throw new Error('Input components must be contained within a Form component')
 
-    if((props.type === 'radio' && props.checked) || props.value || props.defaultValue) {
+    if(props.type === 'radio') {
+      if(props.checked) {
+        props.setValue(props.name, props.value)
+      }
+    } else if (props.value || props.defaultValue) {
       props.setValue(props.name, props.value || props.defaultValue)
     }
   }
 
-  handleChange = (event, possibleArgumentValue) => {
+  handleChange = (...args) => {
+    const [event, possibleArgumentValue] = args
     const { name, type, value, numeric, setValue, onChange } = this.props
 
     if(name) {
@@ -42,7 +47,7 @@ export default render => class extends Component {
     }
 
     if(onChange) {
-      onChange(event)
+      onChange.apply(event.target, args)
     }
   }
 

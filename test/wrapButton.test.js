@@ -7,7 +7,7 @@ const AnchorSubmit = wrapButton(props => <a href="#" {...props} />)
 const setup = createSetup(({ spy }) =>
   <Form>
     <Input name="text" value="initial" />
-    <AnchorSubmit onClick={spy}>Submit</AnchorSubmit>
+    <AnchorSubmit onSubmit={spy}>Submit</AnchorSubmit>
   </Form>
 )
 

@@ -80,8 +80,7 @@ test("radio buttons set initial value and can be changed", () => {
   )()
 
   submit()
-  form.find('input').at(1).simulate('click')
-  form.find('input').at(1).simulate('change')
+  form.find('input').at(1).simulate('click').simulate('change')
   submit()
   validateCalls({ value: '1' }, { value: '2' })
 })
