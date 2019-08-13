@@ -1,31 +1,20 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { keyPath } from './keyPath'
 
-export default (ContextProvider) => class extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { values: props.values || {}, validated: false }
-  }
+export default ContextProvider => props => {
+  const [validated, setValidated] = useState(false)
+  const [values, setValues] = useState({})
 
-  UNSAFE_componentWillReceiveProps({ values }) {
-    this.setState({ values: values || this.state.values || {} })
-  }
+  useEffect(() => props.values && setValues(props.values), [])
 
-  setValue = (name, value) => this.setState({ values: keyPath.set(name, { ...this.state.values }, value) })
-  setValidated = () => this.setState({ validated: true })
+  const setValue = (name, value) => setValues(keyPath.set(name, { ...values }, value))
+  const getValues = () => values
+  const className = ((validated ? 'validated ' : '') + (props.className || '') || undefined)
 
-  render() {
-    const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
-
-    return (
-      <form noValidate {...this.props} className={className}>
-        <ContextProvider {...this.props} value={{ 
-          setValue: this.setValue, 
-          values: this.state.values,
-          setValidated: this.setValidated
-        }} />
-        <input type="submit" style={{ visibility: 'hidden', position: 'absolute' }}/>
-      </form>
-    )
-  }
+  return (
+    <form noValidate {...props} className={className}>
+      <ContextProvider {...props} value={{ setValue, getValues, setValidated }} />
+      <input type="submit" style={{ visibility: 'hidden', position: 'absolute' }}/>
+    </form>
+  )
 }

@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { keyPath } from './keyPath'
 
-export default render => class extends Component {
-  state = { validated: false }
+export default render => props => {
+  const [fieldValidated, setFieldValidated] = useState(false)
 
-  constructor(props) {
-    super(props)
+  useEffect(() => {
+    const { type, checked, name, value, defaultValue, setValue } = props
 
-    if(!props.name) throw new Error('You must provide a name prop to form components')
-    if(!props.setValue) throw new Error('Input components must be contained within a Form component')
+    if (!name) throw new Error('You must provide a name prop to form components')
+    if (!setValue) throw new Error('Input components must be contained within a Form component')
 
-    if(props.type === 'radio') {
-      if(props.checked) {
-        props.setValue(props.name, props.value)
+    if (type === 'radio') {
+      if (checked) {
+        setValue(name, value)
       }
-    } else if (props.value || props.defaultValue) {
-      props.setValue(props.name, props.value || props.defaultValue)
+    } else if (value || defaultValue) {
+      setValue(name, value || defaultValue)
     }
-  }
+  }, [])
 
-  handleChange = (...args) => {
+  const onChange = (...args) => {
     const [event, possibleArgumentValue] = args
-    const { name, type, value, numeric, setValue, onChange } = this.props
+    const { name, type, value, numeric, setValue, onChange } = props
 
     if(name) {
       const getElementValue = () => {
@@ -42,7 +42,7 @@ export default render => class extends Component {
       setValue(name, finalValue)
       if(event.target.checkValidity) {
         event.target.checkValidity()
-        this.setState({ validated: true })
+        setFieldValidated(true)
       }
     }
 
@@ -51,25 +51,23 @@ export default render => class extends Component {
     }
   }
 
-  render() {
-    const { setValue, setValidated, values, type, checked, defaultValue, ...propsToPass } = this.props
-    const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
+  const { setValue, setValidated, getValues, type, checked, defaultValue, ...propsToPass } = props
+  const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
-    // provide special handling for radio buttons
-    const currentValue = keyPath(this.props.name, this.props.values)
-    const formValue = currentValue || this.props.value || ''
-    const elementValue = type === 'radio' ? this.props.value : formValue
-    const checkedValue = type === 'radio' && { checked: String(elementValue) === String(currentValue) }
+  // provide special handling for radio buttons
+  const currentValue = keyPath(props.name, getValues())
+  const formValue = currentValue || props.value || ''
+  const elementValue = type === 'radio' ? props.value : formValue
+  const checkedValue = type === 'radio' && { checked: String(elementValue) === String(currentValue) }
 
-    const finalProps = {
-      ...checkedValue,
-      ...propsToPass,
-      type,
-      value: elementValue,
-      className,
-      onChange: this.handleChange
-    }
-
-    return render(finalProps)
+  const finalProps = {
+    ...checkedValue,
+    ...propsToPass,
+    type,
+    value: elementValue,
+    className,
+    onChange
   }
+
+  return render(finalProps)
 }

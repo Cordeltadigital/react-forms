@@ -1,31 +1,32 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { findDOMNode } from 'react-dom'
 
-export default (render, submit) => class extends Component {
-  state = { executing: false }
+export default (render, submit) => props => {
+  if(!props.getValues) throw new Error('Button components must be contained within a Form component')
 
-  onButtonClick = e => this.executeHandler(e.target.closest('form'), e)
+  const [executing, setExecuting] = useState(false)
 
-  componentDidMount() {
+  useEffect(() => {
     if(submit) {
       const element = findDOMNode(this)
       if(element) {
         const form = element.closest('form')
-        form.addEventListener('submit', e => this.executeHandler(form, e))
+        form.addEventListener('submit', e => executeHandler(form, e))
       }
     }
-  }
+  }, [])
 
-  executeHandler = (form, e) => {
-    const { onClick, onSubmit, values, setValidated } = this.props
+  const executeHandler = (form, e) => {
+    const { onClick, onSubmit, getValues, setValidated } = props
+    const values = getValues()
 
     if(submit) {
-      setValidated()
+      setValidated(true)
       if (form.checkValidity()) {
         const clickResponse = onSubmit && onSubmit(values)
         if (clickResponse instanceof Promise) {
-          this.setState({ executing: true })
-          clickResponse.finally(() => this.setState({ executing: false }))
+          setExecuting(true)
+          clickResponse.finally(() => setExecuting(false))
         }
       }
     } else if(onClick) {
@@ -35,20 +36,16 @@ export default (render, submit) => class extends Component {
     e.preventDefault()
   }
 
-  render() {
-    if(!this.props.values) throw new Error('Button components must be contained within a Form component')
+  const onButtonClick = e => executeHandler(e.target.closest('form'), e)
 
-    const { setValue, setValidated, onClick, values, children, ...propsToPass} = this.props
-    const className = ((this.state.validated ? 'validated ' : '') + (this.props.className || '') || undefined)
+  const { setValue, setValidated, onClick, getValues, children, ...propsToPass} = props
 
-    const finalProps = {
-      ...propsToPass,
-      children,
-      className,
-      onClick: this.onButtonClick,
-      disabled: !!this.state.executing
-    }
-
-    return render(finalProps)
+  const finalProps = {
+    ...propsToPass,
+    children,
+    onClick: onButtonClick,
+    disabled: executing
   }
+
+  return render(finalProps)
 }
