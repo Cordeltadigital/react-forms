@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react'
 
 const nextId = (id => () => ++id)(0)
 const elementId = id => `react-functional-forms-${id}`
+const resolveValue = (value, args) => typeof value === 'function'
+  ? value.apply(null, args)
+  : value
 
 // this module is getting a little long and unwieldy, but it's still reasonably clear and I'm not sure of the best
 // way to refactor. Specific radio button handling adds some complexity, could split that stuff out
-export default (render, { passErrorProp, valueFromEvent } = {}) => props => {
+export default (render, options = {}) => props => {
   if (!props.name) throw new Error('You must provide a name prop to form components')
   if (!props.setFieldValue) throw new Error('Input components must be contained within a Form component')
 
@@ -29,8 +32,12 @@ export default (render, { passErrorProp, valueFromEvent } = {}) => props => {
       if (checked) {
         setFieldValue({ [name]: applyValueTransforms(value) })
       }
+
     } else if (value || defaultValue) {
       setFieldValue({ [name]: applyValueTransforms(value || defaultValue) })
+
+    } else if (options.defaultValue) {
+      setFieldValue({ [name]: resolveValue(options.defaultValue, [props]) })
     }
 
     registerFieldValidator(updateValidationState)
@@ -39,10 +46,11 @@ export default (render, { passErrorProp, valueFromEvent } = {}) => props => {
   const onChange = (...args) => {
     const [event] = args
     const { name, type, value, setFieldValue, onChange } = props
+    const { valueFromEvent } = options
 
     const elementValue = (() => {
       if(valueFromEvent) {
-        return valueFromEvent.apply(null, event)
+        return valueFromEvent.apply(null, args)
       } else if (type === 'radio') {
         return value
       } else if (event.target && event.target.value !== undefined) {
@@ -66,32 +74,37 @@ export default (render, { passErrorProp, valueFromEvent } = {}) => props => {
     }
   }
 
-  // remove any props that may interfere with rendering of the actual component
-  const {
-    type, name, value, checked, defaultValue, numeric,
-    onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
-    ...passThroughProps
-  } = props
+  // introducing a block here prevents any declarations here from clobbering declarations above
+  // this is a serious code smell that the module is getting too long and violates SRP
+  {
+    // remove any props that may interfere with rendering of the actual component
+    const {
+      type, name, value, checked, defaultValue, numeric,
+      onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
+      ...passThroughProps
+    } = props
+    const { passErrorProp } = options
 
-  const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
+    const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
-  // radio button handling
-  const currentValue = props.getFieldValue(name)
-  const elementValue = type === 'radio' ? value : currentValue
-  const checkedProp = type === 'radio' && { checked: value === currentValue }
-  const errorProp = passErrorProp && { error }
+    // radio button handling
+    const currentValue = props.getFieldValue(name)
+    const elementValue = type === 'radio' ? value : currentValue
+    const checkedProp = type === 'radio' && { checked: value === currentValue }
+    const errorProp = passErrorProp && { error }
 
-  const finalProps = {
-    ...passThroughProps,
-    ...checkedProp,
-    ...errorProp,
-    id,
-    type,
-    name,
-    value: elementValue || '',
-    className,
-    onChange
+    const finalProps = {
+      ...passThroughProps,
+      ...checkedProp,
+      ...errorProp,
+      id,
+      type,
+      name,
+      value: elementValue === undefined ? '' : elementValue,
+      className,
+      onChange
+    }
+
+    return render(finalProps)
   }
-
-  return render(finalProps)
 }

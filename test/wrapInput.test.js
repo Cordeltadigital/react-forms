@@ -71,6 +71,29 @@ test("valueFromEvent option allows specifying input value", () => {
   validateCalls({ text: 'test' })
 })
 
+const defaultValueInput = defaultValue => wrapInput(props => <input {...props} />, { defaultValue })
+const defaultValueSetup = defaultValue => createSetup(({ spy, props }) => {
+  const DefaultValueInput = defaultValueInput(defaultValue)
+  return (
+    <Form onSubmit={spy}>
+      <DefaultValueInput name="text" {...props} />
+      <Submit/>
+    </Form>
+  )
+})
+
+test("initialValue prop allows specifying initial value from scalar", () => {
+  const { submit, validateCalls } = defaultValueSetup('test')()
+  submit()
+  validateCalls({ text: 'test' })
+})
+
+test("initialValue prop allows specifying initial value from function", () => {
+  const { submit, validateCalls } = defaultValueSetup(props => props['data-default'])({ 'data-default': 'test' })
+  submit()
+  validateCalls({ text: 'test' })
+})
+
 // enzyme does not support the :invalid pseudo class used by the input wrapper...
 // test("error prop is set on invalid components if field is invalid", () => {
 //   const InputWithError = wrapInput(props => <input name="test" {...props} required />, { passErrorProp: true })
