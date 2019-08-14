@@ -82,14 +82,16 @@ const defaultValueSetup = defaultValue => createSetup(({ spy, props }) => {
   )
 })
 
-test("initialValue prop allows specifying initial value from scalar", () => {
-  const { submit, validateCalls } = defaultValueSetup('test')()
+test("defaultValue option allows specifying default value from scalar", () => {
+  const { element, submit, validateCalls } = defaultValueSetup('test')()
+  expect(element('input', 'text').props().value).toBe('test')
   submit()
   validateCalls({ text: 'test' })
 })
 
-test("initialValue prop allows specifying initial value from function", () => {
-  const { submit, validateCalls } = defaultValueSetup(props => props['data-default'])({ 'data-default': 'test' })
+test("defaultValue option allows specifying default value from function", () => {
+  const { element, submit, validateCalls } = defaultValueSetup(props => props['data-default'])({ 'data-default': 'test' })
+  expect(element('input', 'text').props().value).toBe('test')
   submit()
   validateCalls({ text: 'test' })
 })

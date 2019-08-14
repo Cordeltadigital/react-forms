@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react'
 
 const nextId = (id => () => ++id)(0)
 const elementId = id => `react-functional-forms-${id}`
-const resolveValue = (value, args) => typeof value === 'function'
-  ? value.apply(null, args)
-  : value
 
 // this module is getting a little long and unwieldy, but it's still reasonably clear and I'm not sure of the best
 // way to refactor. Specific radio button handling adds some complexity, could split that stuff out
@@ -17,6 +14,8 @@ export default (render, options = {}) => props => {
   const [id] = useState(elementId(nextId()))
 
   const applyValueTransforms = value => (props.type === 'number' || props.numeric) ? +value : value
+  const resolveValue = (value, args) => typeof value === 'function' ? value.apply(null, args) : value
+  const defaultValueFromOptions = () => options.defaultValue && resolveValue(options.defaultValue, [props])
 
   const updateValidationState = () => {
     setFieldValidated(true)
@@ -37,7 +36,7 @@ export default (render, options = {}) => props => {
       setFieldValue({ [name]: applyValueTransforms(value || defaultValue) })
 
     } else if (options.defaultValue) {
-      setFieldValue({ [name]: resolveValue(options.defaultValue, [props]) })
+      setFieldValue({ [name]: defaultValueFromOptions() })
     }
 
     registerFieldValidator(updateValidationState)
@@ -90,6 +89,8 @@ export default (render, options = {}) => props => {
     // radio button handling
     const currentValue = props.getFieldValue(name)
     const elementValue = type === 'radio' ? value : currentValue
+    const finalValue = elementValue === undefined ? (defaultValueFromOptions() || '') : elementValue
+
     const checkedProp = type === 'radio' && { checked: value === currentValue }
     const errorProp = passErrorProp && { error }
 
@@ -100,7 +101,7 @@ export default (render, options = {}) => props => {
       id,
       type,
       name,
-      value: elementValue === undefined ? '' : elementValue,
+      value: finalValue,
       className,
       onChange
     }
