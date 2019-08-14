@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react'
 const nextId = (id => () => ++id)(0)
 const elementId = id => `react-functional-forms-${id}`
 
-export default (render, { passErrorProp } = {}) => props => {
+// this module is getting a little long and unwieldy, but it's still reasonably clear and I'm not sure of the best
+// way to refactor. Specific radio button handling adds some complexity, could split that stuff out
+export default (render, { passErrorProp, valueFromEvent } = {}) => props => {
   if (!props.name) throw new Error('You must provide a name prop to form components')
   if (!props.setFieldValue) throw new Error('Input components must be contained within a Form component')
 
@@ -35,19 +37,20 @@ export default (render, { passErrorProp } = {}) => props => {
   }, [])
 
   const onChange = (...args) => {
-    const [event, possibleArgumentValue] = args
-    const { name, type, value, numeric, setFieldValue, onChange } = props
+    const [event] = args
+    const { name, type, value, setFieldValue, onChange } = props
 
     const elementValue = (() => {
-      if (type === 'radio') {
+      if(valueFromEvent) {
+        return valueFromEvent.apply(null, event)
+      } else if (type === 'radio') {
         return value
-      } else if (event.target && event.target.value) {
+      } else if (event.target && event.target.value !== undefined) {
         return event.target.value
-      } else if (event.value) {
+      } else if (event.value !== undefined) {
         return event.value
       } else {
-        // the material-ui library passes the value as a second argument to the event handler
-        return possibleArgumentValue
+        throw new Error('Unable to determine input value from event')
       }
     })()
 
