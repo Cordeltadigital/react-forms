@@ -53,3 +53,17 @@ test("classes are appended correctly to custom component className", () => {
   const { form } = setup({ className: 'my-class my-other-class' })
   expect(form.find('div').hasClass('my-class my-other-class')).toBe(true)
 })
+
+// enzyme does not support the :invalid pseudo class used by the input wrapper...
+// test("error prop is set on invalid components if field is invalid", () => {
+//   const InputWithError = wrapInput(props => <input name="test" {...props} required />, { passErrorProp: true })
+//   const { submit, form, spy } = createSetup(props =>
+//     <Form onSubmit={spy}>
+//       <InputWithError name="test" required />
+//       <Submit />
+//     </Form>
+//   )()
+//
+//   submit()
+//   expect(form.find('input[name="test"]').props()['error']).toBe(true)
+// })

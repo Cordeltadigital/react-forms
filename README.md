@@ -11,8 +11,8 @@ Build ultra simple, stateless, validated forms for use in React function compone
 ```jsx
 import { Form, Input, Textarea, Select, Button, Submit } from 'react-functional-forms'
 
-export default ({ onSubmit, onCancel }) => (
-  <Form>
+export default ({ onSubmit, onCancel, initialValues }) => (
+  <Form onSubmit={onSubmit} values={initialValues}>
     <label>Name</label>
     <Input name="name" required minlength="5" maxlength="50" />
 
@@ -29,8 +29,8 @@ export default ({ onSubmit, onCancel }) => (
       <Input name="rating" type="radio">3</Input>
     </div>
     
-    <Submit onSubmit={onSubmit}>Submit</Submit>
-    <Button onClick={onCancel}>Cancel</Button>
+    <Submit>Submit</Submit>
+    <button onClick={onCancel}>Cancel</button>
   </Form>
 )
 ```
@@ -109,32 +109,34 @@ form *.validated:invalid {
 
 ### Custom Components
 
-`react-functional-forms` exposes a `wrap` function that can be used to wrap components so that they can be included in 
-output form value objects.
+`react-functional-forms` exposes functions that can be used to wrap components so that they can be included in output 
+form value objects.
 
 ```jsx harmony
 import React from 'react'
-import { wrap, Form, Submit } from 'react-functional-forms'
+import { wrapInput, wrapSubmit, Form } from 'react-functional-forms'
 
-const InputField = wrap(({ onChange, name, label, required, className }) =>
+const InputField = wrapInput(({ onChange, name, label, required, className }) =>
   <div className={className}>
     <label>{label}</label>
     <input name={name} onChange={onChange} required={required} />
   </div>
 )
 
+const AnchorSubmit = wrapSubmit(props => <a {...props} />) 
+
 export const SampleForm = ({ onSubmit }) => (
-  <Form>
+  <Form onSubmit={onSubmit}>
     <InputField label="Name" name="name" required />
     <InputField label="Description" name="description" />
-    <Submit onSubmit={onSubmit} />
+    <AnchorSubmit>Submit</AnchorSubmit>
   </Form>
 )
 ```
 
 ### Integration With Third Party Libraries
 
-The `wrap` function described above can also be used to wrap components from third party libraries. 
+The functions described above can also be used to wrap components from third party libraries. 
 
 ```jsx harmony
 

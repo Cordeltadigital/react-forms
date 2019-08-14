@@ -1,8 +1,8 @@
 import React from 'react'
-import { Form, Input, wrapButton } from '../src'
+import { Form, Input, wrapSubmit } from '../src'
 import { createSetup } from './setup'
 
-const AnchorSubmit = wrapButton(props => <a href="#" {...props} />)
+const AnchorSubmit = wrapSubmit(props => <a {...props} />)
 
 const setup = createSetup(({ spy }) =>
   <Form onSubmit={spy}>

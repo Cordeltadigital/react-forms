@@ -67,8 +67,14 @@ test("initial value can be set using defaultValue prop", () => {
   validateCalls({ text: 'initial' })
 })
 
-// test("numeric prop")
-// test("error prop")
+test("passing numeric prop coerces values to numbers", () => {
+  const { submit, change, validateCalls } = setup({ numeric: true })
+
+  change('input', 'text', '3.5')
+  submit()
+
+  validateCalls({ text: 3.5 })
+})
 
 
 // radio buttons
@@ -88,6 +94,32 @@ test("radio buttons set initial value and can be changed", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
-// test("value can be set using children")
-// test("radio button required")
-// test("numeric prop")
+test("radio button required", () => {
+  const { form, submit, validateCalls } = createSetup(({ spy }) =>
+    <Form onSubmit={spy}>
+      <Input type="radio" name="value" value="1" required />
+      <Input type="radio" name="value" value="2" required />
+      <Submit />
+    </Form>
+  )()
+
+  submit()
+  form.find('input').at(1).simulate('click').simulate('change')
+  submit()
+  validateCalls({ value: '2' })
+})
+
+test("numeric prop", () => {
+  const { form, submit, validateCalls } = createSetup(({ spy }) =>
+    <Form onSubmit={spy}>
+      <Input type="radio" name="value" value="1" numeric checked />
+      <Input type="radio" name="value" value="2" numeric />
+      <Submit />
+    </Form>
+  )()
+
+  submit()
+  form.find('input').at(1).simulate('click').simulate('change')
+  submit()
+  validateCalls({ value: 1 }, { value: 2 })
+})

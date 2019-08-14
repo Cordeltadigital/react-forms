@@ -11,10 +11,12 @@ export default (render, { passErrorProp } = {}) => props => {
   const [error, setError] = useState(false)
   const [id] = useState(elementId(nextId()))
 
+  const applyValueTransforms = value => (props.type === 'number' || props.numeric) ? +value : value
+
   const updateValidationState = () => {
     setFieldValidated(true)
-    // this is a little hacky, but the simplest way I could think of to
-    // determine the validity of the actual input element
+    // this is a little hacky, but the simplest way I could think of to determine the
+    // validity of the actual input element. :invalid is also not supported by enzyme
     setError(Boolean(document.querySelector(`#${id}:invalid`)))
   }
 
@@ -23,10 +25,10 @@ export default (render, { passErrorProp } = {}) => props => {
 
     if (type === 'radio') {
       if (checked) {
-        setFieldValue({ [name]: value })
+        setFieldValue({ [name]: applyValueTransforms(value) })
       }
     } else if (value || defaultValue) {
-      setFieldValue({ [name]: value || defaultValue })
+      setFieldValue({ [name]: applyValueTransforms(value || defaultValue) })
     }
 
     registerFieldValidator(updateValidationState)
@@ -49,9 +51,7 @@ export default (render, { passErrorProp } = {}) => props => {
       }
     })()
 
-    const finalValue = (type === 'number' || numeric) ? +elementValue : elementValue
-
-    setFieldValue({ [name]: finalValue })
+    setFieldValue({ [name]: applyValueTransforms(elementValue) })
 
     if(event.target.checkValidity) {
       event.target.checkValidity()
@@ -63,14 +63,16 @@ export default (render, { passErrorProp } = {}) => props => {
     }
   }
 
+  // remove any props that may interfere with rendering of the actual component
   const {
-    type, name, value, checked, defaultValue,
+    type, name, value, checked, defaultValue, numeric,
     onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
     ...passThroughProps
   } = props
 
   const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
+  // radio button handling
   const currentValue = props.getFieldValue(name)
   const elementValue = type === 'radio' ? value : currentValue
   const checkedProp = type === 'radio' && { checked: value === currentValue }

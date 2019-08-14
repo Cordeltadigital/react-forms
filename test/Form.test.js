@@ -49,4 +49,17 @@ test("object key path can be used to construct deep object", () => {
   validateCalls({ p1: { p2: 'test' } })
 })
 
-// test("values can be set from prop passed for Form component")
+test("values can be set from prop passed to Form component", () => {
+  const { change, submit, validateCalls } = createSetup(({ props, spy }) =>
+    <Form onSubmit={spy} values={{ text: 'initial' }}>
+      <Input name="text" {...props} />
+      <Submit />
+    </Form>
+  )()
+
+  submit()
+  change('input', 'text', 'changed')
+  submit()
+
+  validateCalls({ text: 'initial' }, { text: 'changed' })
+})

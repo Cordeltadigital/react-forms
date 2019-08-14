@@ -3,7 +3,7 @@ import { keyPath } from './keyPath'
 
 export default ContextProvider => props => {
   const [validated, setValidated] = useState(false)
-  const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), {})
+  const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), props.values || {})
   const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
   const form = createRef()
 
