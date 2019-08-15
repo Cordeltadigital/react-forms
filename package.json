@@ -9,7 +9,7 @@
     "prepublish": "babel src --source-maps false --out-dir dist"
   },
   "peerDependencies": {
-    "react": "^16.8.2"
+    "react": "^16.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

@@ -19,6 +19,12 @@ test("initial values are set and can be changed", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
+test("first value is selected by default to match browser behavior", () => {
+  const { submit, validateCalls } = setup()
+  submit()
+  validateCalls({ value: '1' })
+})
+
 test("arbitrary props are passed to element", () => {
   const { element } = setup({ prop1: 'abc', prop2: 2 })
   expect(element('select', 'value').props())

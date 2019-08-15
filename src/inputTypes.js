@@ -30,7 +30,7 @@ export default (props, options, type) => {
     radio: {
       setInitialValue: set => checked && set(value),
       getOutputValue: () => value,
-      getValueProps: ({ currentValue }) => ({ checked: value === currentValue })
+      getValueProps: ({ currentValue }) => ({ checked: applyValueTransforms(value) === currentValue })
     },
     checkbox: {
       setInitialValue: set => set(checkboxValue(checked, value)),

@@ -14,6 +14,7 @@ test("radio buttons set initial value and can be changed", () => {
 
   submit()
   form.find('input').at(1).simulate('click').simulate('change')
+  expect(form.find('input').at(1).props().checked).toBe(true)
   submit()
   validateCalls({ value: '1' }, { value: '2' })
 })
@@ -44,6 +45,7 @@ test("numeric prop", () => {
 
   submit()
   form.find('input').at(1).simulate('click').simulate('change')
+  expect(form.find('input').at(1).props().checked).toBe(true)
   submit()
   validateCalls({ value: 1 }, { value: 2 })
 })
