@@ -67,12 +67,13 @@ export default (render, options = {}) => function Input(props) {
       ...passThroughProps
     } = props
     const valueProps = getValueProps({ currentValue: getFieldValue(name) })
+    const typeProps = (type && { type })
     const errorProps = (passErrorProp && { error })
     const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
     const finalProps = {
-      id, type, name, className, onChange,
-      ...passThroughProps, ...valueProps, ...errorProps
+      id, name, className, onChange,
+      ...passThroughProps, ...valueProps, ...typeProps, ...errorProps
     }
 
     return render(finalProps)
