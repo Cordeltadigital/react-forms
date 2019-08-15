@@ -12,7 +12,7 @@ export default (render, options = {}) => function Input(props) {
   const [id] = useState(nextElementId())
 
   useEffect(() => {
-    const { type, name, getFieldValue, setFieldValue, registerFieldValidator } = props
+    const { name, getFieldValue, setFieldValue, registerFieldValidator } = props
     const { setInitialValue, applyValueTransforms } = types(props, options)
 
     // don't override values that were set from passing a values prop to the form

@@ -12,7 +12,7 @@ export default (props, options) => {
 
   const types = {
     text: {
-      setInitialValue: ({ set, element }) => {
+      setInitialValue: ({ set }) => {
         set((value || defaultValue)
           ? value || defaultValue
           : options.defaultValue && resolveValue(options.defaultValue, [props])
