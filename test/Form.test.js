@@ -33,12 +33,6 @@ test("multiple elements", () => {
   })
 })
 
-test("validated class is appended to invalid form className when submitted", () => {
-  const { submit, form } = simpleForm({ required: true })
-  submit()
-  expect(form.find('form').props().className).toContain('validated')
-})
-
 test("onSubmit is fired when form submit event is raised manually", () => {
   const { form, validateCalls } = simpleForm()
   form.find('form').simulate('submit')

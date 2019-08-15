@@ -100,11 +100,8 @@ form label {
   font-size: 0.8em;
 }
 
-/* style all invalid elements when the form is submitted */
-form.validated *:invalid, 
-/* style individual invalid elements as they change */
-form *.validated:invalid {
-  border: 2px solid red;
+form .validated:invalid {
+  outline: 1px solid red;
 }
 ```
 
