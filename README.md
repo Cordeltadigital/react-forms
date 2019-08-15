@@ -36,7 +36,8 @@ export default ({ onSubmit, onCancel, initialValues }) => (
 ```
 
 All `props` passed to components are passed to underlying HTML elements. Standard HTML `option` elements can also be
-used for specifying options for the `Select` component.
+used for specifying options for the `Select` component. Using `type="number"` or adding a `numeric` prop will coerce 
+the provided value to a Number type.
 
 ### Submit Semantics
 
@@ -55,8 +56,7 @@ triggered when the `Enter` key (or `Go` button on mobile) is pressed while form 
 
 ### Deep Object Structures
 
-Simple dotted notation can be used to create deep object structures, and using `type="number"` or adding a `numeric` 
-prop will coerce the provided value to a Number type:
+Simple dotted notation can be used to create deep object structures:
 
 ```jsx
 <Form>
