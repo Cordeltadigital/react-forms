@@ -9,6 +9,8 @@ const simpleForm = createSetup(({ props, spy }) =>
   </Form>
 )
 
+// we should do a validation that the form element values are correct, too...
+
 test("multiple elements", () => {
   const { change, submit, validateCalls } = createSetup(({ spy }) =>
     <Form onSubmit={spy}>
@@ -50,9 +52,14 @@ test("object key path can be used to construct deep object", () => {
 })
 
 test("values can be set from prop passed to Form component", () => {
-  const { change, submit, validateCalls } = createSetup(({ props, spy }) =>
-    <Form onSubmit={spy} values={{ text: 'initial' }}>
-      <Input name="text" {...props} />
+  const { change, submit, validateCalls } = createSetup(({ spy }) =>
+    <Form onSubmit={spy} values={{ text: 'initial', check1: true, check2: undefined, radio: '2' }}>
+      <Input name="text" />
+      <Input name="check1" type="checkbox" />
+      <Input name="check2" type="checkbox" value="test" />
+      <Input name="radio" type="radio" value="1" checked />
+      <Input name="radio" type="radio" value="2" />
+      <Input name="radio" type="radio" value="3" />
       <Submit />
     </Form>
   )()
@@ -61,5 +68,8 @@ test("values can be set from prop passed to Form component", () => {
   change('input', 'text', 'changed')
   submit()
 
-  validateCalls({ text: 'initial' }, { text: 'changed' })
+  validateCalls(
+    { text: 'initial', check1: true, check2: undefined, radio: '2' },
+    { text: 'changed', check1: true, check2: undefined, radio: '2' }
+  )
 })

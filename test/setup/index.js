@@ -12,9 +12,10 @@ export const createSetup = render => (
       elementToChange.instance().value = value
       elementToChange.simulate('change')
     }
+    const click = (type, name, event) => element(type, name).simulate('click').simulate('change', event)
     const validateCalls = (...calls) => expect(spy.mock.calls).toEqual(calls.map(values => [values]))
 
-    return { spy, form, submit, element, change, validateCalls }
+    return { spy, form, submit, element, change, click, validateCalls }
   }
 )
 

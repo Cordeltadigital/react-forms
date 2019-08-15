@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default render => props => {
+export default render => function Submit(props) {
   if(!props.onSubmit) throw new Error('Button components must be contained within a Form component')
 
   const [executing, setExecuting] = useState(false)
