@@ -11,21 +11,17 @@ export default (render, options = {}) => function Input(props) {
   const [error, setError] = useState(false)
   const [id] = useState(nextElementId())
 
-  const updateValidationState = () => {
-    setFieldValidated(true)
-    // this is a little hacky, but the simplest way I could think of to determine the
-    // validity of the actual input element. :invalid is also not supported by enzyme
-    setError(Boolean(document.querySelector(`#${id}:invalid`)))
-  }
-
   useEffect(() => {
     const { type, name, getFieldValue, setFieldValue, registerFieldValidator } = props
-    const { setInitialValue, applyValueTransforms } = types(props, options, type)
+    const { setInitialValue, applyValueTransforms } = types(props, options)
 
     // don't override values that were set from passing a values prop to the form
     if(getFieldValue(name) === undefined) {
-      // pass a setter function - radio buttons do not always want to set a value!
-      setInitialValue(value => setFieldValue({ [name]: applyValueTransforms(value) }))
+      setInitialValue({
+        // pass a setter function - radio buttons do not always want to set a value!
+        set: value => setFieldValue({ [name]: applyValueTransforms(value) }),
+        element: document.querySelector(`#${id}`)
+      })
     }
     registerFieldValidator(updateValidationState)
 
@@ -34,9 +30,9 @@ export default (render, options = {}) => function Input(props) {
 
   const onChange = (...args) => {
     const [event] = args
-    const { name, type, setFieldValue, onChange } = props
+    const { name, setFieldValue, onChange } = props
     const { valueFromEvent } = options
-    const { getOutputValue, applyValueTransforms } = types(props, options, type)
+    const { getOutputValue, applyValueTransforms } = types(props, options)
 
     const elementValue = valueFromEvent
       ? valueFromEvent.apply(null, args)
@@ -54,18 +50,25 @@ export default (render, options = {}) => function Input(props) {
     }
   }
 
-  {
+  const updateValidationState = () => {
+    setFieldValidated(true)
+    // this is a little hacky, but the simplest way I could think of to determine the
+    // validity of the actual input element. :invalid is also not supported by enzyme
+    setError(Boolean(document.querySelector(`#${id}:invalid`)))
+  }
+
+  /* render */ {
+    const { passErrorProp } = options
+    const { getValueProps } = types(props, options)
+
     const {
       type, name, value, checked, defaultValue, numeric,
       onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
       ...passThroughProps
     } = props
-    const { passErrorProp } = options
-    const { getValueProps } = types(props, options, type)
-
-    const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
     const valueProps = getValueProps({ currentValue: getFieldValue(name) })
     const errorProps = (passErrorProp && { error })
+    const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
     const finalProps = {
       id, type, name, className, onChange,
