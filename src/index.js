@@ -20,7 +20,8 @@ export const Select = createConsumer(input(props =>
   <select {...props}>
     {props.options && props.options.map(x => <option value={x} key={x}>{x}</option> )}
     {props.children}
-  </select>
+  </select>,
+  { type: 'select' }
 ))
 
 export const wrapInput = (component, options) => createConsumer(input(props => createElement(component, props), options))

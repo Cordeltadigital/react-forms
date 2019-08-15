@@ -1,7 +1,7 @@
 import enzyme from 'enzyme/build'
 
 export const createSetup = render => (
-  props => {
+  (props = undefined) => {
     const spy = jest.fn()
     const form = enzyme.mount(render({ props, spy }))
 

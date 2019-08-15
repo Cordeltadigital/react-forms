@@ -37,7 +37,7 @@ test("html validation attributes prevent onClick handler from firing if invalid"
   validateCalls({ text: 'changed' })
 })
 
-// doesn't work???
+// works in browser - not sure if due to lack of enzyme / jsdom support?
 // test("minLength attribute", () => {
 //   const { submit, change, validateCalls } = setup({ required: true, minLength: 2 })
 //

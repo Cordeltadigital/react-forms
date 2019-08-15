@@ -9,6 +9,17 @@ const setup = createSetup(({ props, spy }) => (
   </Form>
 ))
 
+const useChildren = createSetup(({ spy, props }) => (
+  <Form onSubmit={spy}>
+    <Select name="value" {...props}>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    </Select>
+    <Submit />
+  </Form>
+))
+
 test("initial values are set and can be changed", () => {
   const { submit, change, validateCalls } = setup({ value: '1' })
 
@@ -19,11 +30,28 @@ test("initial values are set and can be changed", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
-test("first value is selected by default to match browser behavior", () => {
+test("initial values are set and can be changed using children", () => {
+  const { submit, change, validateCalls } = setup({ value: '1' })
+
+  submit()
+  change('select', 'value', '2')
+  submit()
+
+  validateCalls({ value: '1' }, { value: '2' })
+})
+
+test("first value is selected by default when options prop is passed to match browser behavior", () => {
   const { submit, validateCalls } = setup()
   submit()
   validateCalls({ value: '1' })
 })
+
+// this does work in the browser... another enzyme / jsdom limitation?
+// test("first value is selected by default when options children are used to match browser behavior", () => {
+//   const { submit, validateCalls } = useChildren()
+//   submit()
+//   validateCalls({ value: '1' })
+// })
 
 test("arbitrary props are passed to element", () => {
   const { element } = setup({ prop1: 'abc', prop2: 2 })
@@ -31,19 +59,17 @@ test("arbitrary props are passed to element", () => {
     .toMatchObject({ prop1: 'abc', prop2: 2 })
 })
 
-// the initial value used to be set to the first in the list to match browser behavior
-// this hasn't been implemented in the new wrapped component world - THIS NEEDS TO BE DONE!
-// test("html validation attributes prevent onClick handler from firing if invalid", () => {
-//   const { submit, change, validateCalls } = setup({ required: true })
-//
-//   submit()
-//   change('select', 'value', '1')
-//   submit()
-//   change('select', 'value', '')
-//   submit()
-//
-//   validateCalls({ value: '1' })
-// })
+test("html validation attributes prevent onClick handler from firing if invalid", () => {
+  const { submit, change, validateCalls } = setup({ required: true, options: ['', '1', '2', '3'] })
+
+  submit()
+  change('select', 'value', '1')
+  submit()
+  change('select', 'value', '')
+  submit()
+
+  validateCalls({ value: '1' })
+})
 
 test("validated class is appended to invalid element className", () => {
   const { change, element } = setup({ required: true })
@@ -54,25 +80,6 @@ test("validated class is appended to invalid element className", () => {
 test("classes are appended correctly", () => {
   const { element } = setup({ className: 'my-class my-other-class' })
   expect(element('select', 'value').props().className).toContain('my-class my-other-class')
-})
-
-test("standard options can be used", () => {
-  const { submit, change, validateCalls } = createSetup(({ spy }) => (
-    <Form onSubmit={spy}>
-      <Select name="value" value="1">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-      </Select>
-      <Submit />
-    </Form>
-  ))()
-
-  submit()
-  change('select', 'value', '2')
-  submit()
-
-  validateCalls({ value: '1' }, { value: '2' })
 })
 
 test("value attribute can be used", () => {

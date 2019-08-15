@@ -23,7 +23,7 @@ export default ({ onSubmit, onCancel, initialValues }) => (
     <Textarea name="description" maxLength="100" />
 
     <label>Type</label>
-    <Select name="type" options={['One', 'Two']} />
+    <Select name="type" options={['', 'One', 'Two']} required />
 
     <label>Rating</label>
     <div>
