@@ -1,6 +1,6 @@
 # react-functional-forms
 
-Build ultra simple, stateless, validated forms for use in React function components.
+Ultra simple, stateless, validated forms for use in React function components.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Build ultra simple, stateless, validated forms for use in React function compone
 ## Usage
 
 ```jsx
-import { Form, Input, Textarea, Select, Button, Submit } from 'react-functional-forms'
+import { Form, Input, Textarea, Select, Submit } from 'react-functional-forms'
 
 export default ({ onSubmit, onCancel, initialValues }) => (
   <Form onSubmit={onSubmit} values={initialValues}>
@@ -40,7 +40,7 @@ used for specifying options for the `Select` component.
 
 ### Submit Semantics
 
-The Submit `onSubmit` and Button `onClick` handlers are passed an object containing form values:
+Form `onSubmit` handlers are passed an object containing form values:
 
 ```json
 {
@@ -50,10 +50,8 @@ The Submit `onSubmit` and Button `onClick` handlers are passed an object contain
 }
 ```
 
-The `onSubmit` handler passed to the `Submit` component is only called if validation passes. The `onClick` handler
-passed to `Button` components does not trigger validation and is passed unvalidated values. 
-
-The `onSubmit` handler will also be triggered when the `enter` key is pressed while form elements are active.
+The `onSubmit` handler passed to the `Form` component is only called if validation passes. Form submission is also 
+triggered when the `Enter` key (or `Go` button on mobile) is pressed while form elements are active.
 
 ### Deep Object Structures
 
@@ -107,7 +105,7 @@ form *.validated:invalid {
 }
 ```
 
-### Custom Components
+## Custom Components
 
 `react-functional-forms` exposes functions that can be used to wrap components so that they can be included in output 
 form value objects.
