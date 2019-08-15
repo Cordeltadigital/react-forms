@@ -27,10 +27,13 @@ export default ({ onSubmit, onCancel, initialValues }) => (
 
     <label>Rating</label>
     <div>
-      <Input name="rating" type="radio">1</Input>
-      <Input name="rating" type="radio">2</Input>
-      <Input name="rating" type="radio">3</Input>
+      <Input name="rating" type="radio" numeric checked>1</Input>
+      <Input name="rating" type="radio" numeric>2</Input>
+      <Input name="rating" type="radio" numeric>3</Input>
     </div>
+
+    <label>Urgent</label>
+    <Input name="urgent" type="checkbox" />
     
     <Submit>Submit</Submit>
     <button onClick={onCancel}>Cancel</button>
@@ -50,7 +53,9 @@ Form `onSubmit` handlers are passed an object containing form values:
 {
   "name": "",
   "description": "",
-  "type": "One"
+  "type": "One",
+  "rating": 1,
+  "urgent": false
 }
 ```
 
