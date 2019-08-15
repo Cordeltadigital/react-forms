@@ -45,10 +45,8 @@ export default ({ onSubmit, onCancel, initialValues }) => (
 
 All `props` passed to components are passed to underlying HTML elements. Standard HTML `option` elements can also be
 used for specifying options for the `Select` component. Using `type="number"` or adding a `numeric` prop will coerce 
-the provided value to a Number type. Specifying a `value` prop for checkboxes causes the output value to toggle between 
-the provided value and undefined.
-
-### Submit Semantics
+the provided value to a `Number` type. Specifying a `value` prop for checkboxes causes the output value to toggle 
+between the provided value and `undefined`.
 
 Form `onSubmit` handlers are passed an object containing form values:
 
