@@ -4,11 +4,14 @@ Ultra simple, stateless, validated forms for use in React function components.
 
 ## Installation
 
-    yarn add react-functional-forms
+```shell script
+yarn add react-functional-forms
+```
     
 ## Usage
 
 ```jsx
+import React from 'react'
 import { Form, Input, Textarea, Select, Submit } from 'react-functional-forms'
 
 export default ({ onSubmit, onCancel, initialValues }) => (
