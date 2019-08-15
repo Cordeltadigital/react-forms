@@ -25,7 +25,7 @@ export default (render, options = {}) => function Input(props) {
     }
     registerFieldValidator(updateValidationState)
 
-    // need to unregister in case of dynamic form elements
+    // TODO: need to unregister in case of dynamic form elements
   }, [])
 
   const onChange = (...args) => {

@@ -17,6 +17,7 @@ export default ContextProvider => props => {
 
     if(form.current.checkValidity() && props.onSubmit) {
       props.onSubmit(getFieldValues())
+      // TODO: `resetOnSubmit` option
     }
 
     e.preventDefault()

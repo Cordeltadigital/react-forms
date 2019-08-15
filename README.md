@@ -106,6 +106,10 @@ form label {
   font-size: 0.8em;
 }
 
+form label:not(:first-child) {
+  margin-top: 5px;
+}
+
 form .validated:invalid {
   outline: 1px solid red;
 }
