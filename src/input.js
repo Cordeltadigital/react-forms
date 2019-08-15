@@ -40,7 +40,7 @@ export default (render, options = {}) => function Input(props) {
 
     setFieldValue({ [name]: applyValueTransforms(elementValue) })
 
-    if(event.target.checkValidity) {
+    if(event && event.target && event.target.checkValidity) {
       event.target.checkValidity()
       updateValidationState()
     }

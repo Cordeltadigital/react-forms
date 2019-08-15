@@ -101,3 +101,4 @@ test("value attribute can be used", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
+// test("multiple select")

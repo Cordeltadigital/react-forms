@@ -23,7 +23,7 @@ export default ({ onSubmit, onCancel, initialValues }) => (
     <Textarea name="description" maxLength="100" />
 
     <label>Type</label>
-    <Select name="type" options={['', 'One', 'Two']} required />
+    <Select name="type" options={['', 'Widget', 'Component']} required />
 
     <label>Rating</label>
     <div>
@@ -54,7 +54,7 @@ Form `onSubmit` handlers are passed an object containing form values:
 {
   "name": "",
   "description": "",
-  "type": "One",
+  "type": "",
   "rating": 1,
   "urgent": false
 }
