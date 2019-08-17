@@ -1,4 +1,4 @@
-import React, { useReducer, createRef } from 'react'
+import { createElement, createRef, useReducer } from 'react'
 import { keyPath } from './keyPath'
 
 export default ContextProvider => props => {
@@ -24,9 +24,9 @@ export default ContextProvider => props => {
   }
 
   return (
-    <form noValidate {...props} onSubmit={onSubmit} ref={form}>
-      <ContextProvider {...props} value={{ registerFieldValidator, setFieldValue, getFieldValue, onSubmit }} />
-      <input type="submit" style={{ visibility: 'hidden', position: 'absolute' }}/>
-    </form>
+    createElement('form', { ...props, noValidate: true, onSubmit: onSubmit, ref: form, children: [
+      createElement(ContextProvider, { ...props, key: 'context', value: { registerFieldValidator, setFieldValue, getFieldValue, onSubmit } }),
+      createElement('input', { key: 'submit', type: 'submit', style: { visibility: 'hidden', position: 'absolute' } })
+    ] })
   )
 }

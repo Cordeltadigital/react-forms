@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 export default render => function Submit(props) {
   if(!props.onSubmit) throw new Error('Button components must be contained within a Form component')
 
+  // TODO: set executing when form is triggered by enter key
   const [executing, setExecuting] = useState(false)
 
   const onClick = e => {

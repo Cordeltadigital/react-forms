@@ -124,10 +124,10 @@ form value objects.
 import React from 'react'
 import { wrapInput, wrapSubmit, Form } from 'react-functional-forms'
 
-const InputField = wrapInput(({ onChange, name, label, required, className }) =>
+const InputField = wrapInput(({ label, className, ...inputProps }) =>
   <div className={className}>
     <label>{label}</label>
-    <input name={name} onChange={onChange} required={required} />
+    <input {...inputProps} />
   </div>
 )
 
@@ -136,16 +136,49 @@ const AnchorSubmit = wrapSubmit(props => <a {...props} />)
 export const SampleForm = ({ onSubmit }) => (
   <Form onSubmit={onSubmit}>
     <InputField label="Name" name="name" required />
-    <InputField label="Description" name="description" />
+    <InputField label="Description" name="description" maxLength="100" />
+    <InputField label="Urgent" name="urgent" type="checkbox" />
     <AnchorSubmit>Submit</AnchorSubmit>
   </Form>
 )
 ```
 
+The `wrapInput` function manages the `value` and `onChange` props and in most cases, these are the only props you
+need to pass to your input component. In the example above, all other props are also passed on to enable validation.
+
+If your custom component is rendered with a `type` prop of `radio` or `checkbox`, this will cause the `checked` prop
+to become managed instead of `value`, and should be passed to your input component. You can also force the component
+to be treated as a radio button or checkbox by specifying options to the `wrapInput` function. More on this below.
+
+The `wrapSubmit` function manages the `onClick` and `disabled` props of your submit component. All other props can be
+safely ignored or passed on.
+
 ### Integration With Third Party Libraries
 
-The functions described above can also be used to wrap components from third party libraries. 
+The functions described above can also be used to easily wrap components from third party libraries.
 
 ```jsx harmony
+import { wrapInput } from 'react-functional-forms'
+import * as material from '@material-ui/core'
 
+export const Input = wrapInput(material.Input)
+export const Checkbox = wrapInput(material.Checkbox, { type: 'checkbox' })
+export const Radio = wrapInput(material.Radio, { type: 'radio' })
+export const Select = wrapInput(material.Select, { type: 'select' })
+export const Switch = wrapInput(material.Switch, { type: 'checkbox' })
 ```
+
+## API
+
+### wrapInput(component, options)
+
+Options are as follows:
+
+Option|Type|Default|Description
+-|-|-|-
+type|string|'text'|One of `text`, `radio`, `checkbox` or `select`.
+passErrorProp|boolean|false|Passes a boolean prop named `error` when field validation fails
+valueFromEvent|function||Override the default mechanism for retrieving a new field value from an onChange event
+defaultValue|any||Specify the default value for the field. Can be a value or a function that returns a value. 
+
+### wrapSubmit(component)

@@ -75,3 +75,5 @@ test("passing numeric prop coerces values to numbers", () => {
 
   validateCalls({ text: 3.5 })
 })
+
+// test("provided id is preserved")

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import types from './inputTypes'
 
 const nextElementId = (id => () => `react-functional-forms-${++id}`)(0)
@@ -9,7 +9,7 @@ export default (render, options = {}) => function Input(props) {
 
   const [fieldValidated, setFieldValidated] = useState(false)
   const [error, setError] = useState(false)
-  const [id] = useState(nextElementId())
+  const [id] = useState(props.id || nextElementId())
 
   useEffect(() => {
     const { name, getFieldValue, setFieldValue, registerFieldValidator } = props
@@ -17,6 +17,8 @@ export default (render, options = {}) => function Input(props) {
 
     // don't override values that were set from passing a values prop to the form
     if(getFieldValue(name) === undefined) {
+      // TODO: change setter to a getter and return a private `UNSET` symbol to indicate not to call the field setter
+      // this allows us to set the default value with useState above and not have an initial render cycle without the default value
       setInitialValue({
         // pass a setter function - radio buttons do not always want to set a value!
         set: value => setFieldValue({ [name]: applyValueTransforms(value) }),
