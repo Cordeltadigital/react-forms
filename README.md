@@ -177,8 +177,8 @@ Options are as follows:
 Option|Type|Default|Description
 -|-|-|-
 type|string|'text'|One of `text`, `radio`, `checkbox` or `select`.
-passErrorProp|boolean|false|Passes a boolean prop named `error` when field validation fails
-valueFromEvent|function||Override the default mechanism for retrieving a new field value from an onChange event
+passErrorProp|boolean|false|Passes a boolean prop named `error` when field validation fails.
+valueFromEvent|function||Override the default mechanism for retrieving a new field value from an onChange event. All function arguments are passed on.
 defaultValue|any||Specify the default value for the field. Can be a value or a function that returns a value. 
 
 ### wrapSubmit(component)
