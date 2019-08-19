@@ -19,6 +19,8 @@ export default (render, options = {}) => function Input(props) {
     if(getFieldValue(name) === undefined) {
       // TODO: change setter to a getter and return a private `UNSET` symbol to indicate not to call the field setter
       // this allows us to set the default value with useState above and not have an initial render cycle without the default value
+      // BUT... to get the default value of a select list, we need to render it first? dilemma....
+
       setInitialValue({
         // pass a setter function - radio buttons do not always want to set a value!
         set: value => setFieldValue({ [name]: applyValueTransforms(value) }),
