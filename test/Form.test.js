@@ -16,7 +16,9 @@ test("multiple elements", () => {
     <Form onSubmit={spy}>
       <Input name="input" />
       <Textarea name="textarea" />
-      <Select name="select" options={['select']} />
+      <Select name="select">
+        <option>select</option>
+      </Select>
       <Submit />
     </Form>
   )()

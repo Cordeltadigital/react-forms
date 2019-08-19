@@ -2,14 +2,7 @@ import React from 'react'
 import { createSetup } from './setup'
 import { Form, Select, Submit } from '../src'
 
-const setup = createSetup(({ props, spy }) => (
-  <Form onSubmit={spy}>
-    <Select name="value" options={['1', '2', '3']} {...props} />
-    <Submit />
-  </Form>
-))
-
-const useChildren = createSetup(({ spy, props }) => (
+const setup = createSetup(({ spy, props }) => (
   <Form onSubmit={spy}>
     <Select name="value" {...props}>
       <option>1</option>
@@ -30,25 +23,9 @@ test("initial values are set and can be changed", () => {
   validateCalls({ value: '1' }, { value: '2' })
 })
 
-test("initial values are set and can be changed using children", () => {
-  const { submit, change, validateCalls } = setup({ value: '1' })
-
-  submit()
-  change('select', 'value', '2')
-  submit()
-
-  validateCalls({ value: '1' }, { value: '2' })
-})
-
-test("first value is selected by default when options prop is passed to match browser behavior", () => {
-  const { submit, validateCalls } = setup()
-  submit()
-  validateCalls({ value: '1' })
-})
-
 // this does work in the browser... another enzyme / jsdom limitation?
-// test("first value is selected by default when options children are used to match browser behavior", () => {
-//   const { submit, validateCalls } = useChildren()
+// test("first value is selected by default when options prop is passed to match browser behavior", () => {
+//   const { submit, validateCalls } = setup()
 //   submit()
 //   validateCalls({ value: '1' })
 // })
@@ -60,7 +37,17 @@ test("arbitrary props are passed to element", () => {
 })
 
 test("html validation attributes prevent onClick handler from firing if invalid", () => {
-  const { submit, change, validateCalls } = setup({ required: true, options: ['', '1', '2', '3'] })
+  const { submit, change, validateCalls } = createSetup(({ spy }) => (
+    <Form onSubmit={spy}>
+      <Select name="value" required>
+        <option></option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+      </Select>
+      <Submit />
+    </Form>
+  ))()
 
   submit()
   change('select', 'value', '1')
