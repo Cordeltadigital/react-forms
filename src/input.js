@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import types from './inputTypes'
 
-const nextElementId = (id => () => `react-functional-forms-${++id}`)(0)
+const nextElementId = (id => () => `react-forms-${++id}`)(0)
 
 export default (render, options = {}) => function Input(props) {
   if (!props.name) throw new Error("You must provide a name prop to form components")

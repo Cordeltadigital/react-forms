@@ -23,8 +23,10 @@ export default ContextProvider => props => {
     e.preventDefault()
   }
 
+  const className = `react-forms ${props.className || ''}`
+
   return (
-    createElement('form', { ...props, noValidate: true, onSubmit: onSubmit, ref: form, children: [
+    createElement('form', { ...props, className, noValidate: true, onSubmit: onSubmit, ref: form, children: [
       createElement(ContextProvider, { ...props, key: 'context', value: { registerFieldValidator, setFieldValue, getFieldValue, onSubmit } }),
       createElement('input', { key: 'submit', type: 'submit', style: { visibility: 'hidden', position: 'absolute' } })
     ] })
