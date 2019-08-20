@@ -4,7 +4,7 @@ import { Input, Select, Textarea } from './index'
 const base = (type, render) => ({ label, className, ...inputProps }) => (
   <div className={`${type} ${className}`}>
     <label>{label}</label>
-    {render(inputProps)} />
+    {render(inputProps)}
   </div>
 )
 
