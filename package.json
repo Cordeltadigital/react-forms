@@ -1,5 +1,5 @@
 {
-  "name": "react-functional-forms",
+  "name": "@cordelta/react-forms",
   "version": "0.0.1",
   "description": "Ultra simple, stateless, validated forms for use in React function components",
   "main": "dist/index.js",
