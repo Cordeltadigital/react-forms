@@ -17,10 +17,10 @@ export const Radio = base('Radio', ({ values, labels, ...props }) =>
     <RadioButton {...props} value={value} label={(labels && labels[index]) || value} />
   )
 )
-
-export const Select = base('Select', ({ values, labels, ...props }) =>
-  <Select {...props}>
-    {values.map((value, index) => <option value={value}>{(labels && labels[index]) || value}</option>)}
-  </Select>
-)
-
+//
+// export const Select = base('Select', ({ values, labels, ...props }) =>
+//   <Select {...props}>
+//     {values.map((value, index) => <option value={value}>{(labels && labels[index]) || value}</option>)}
+//   </Select>
+// )
+//
