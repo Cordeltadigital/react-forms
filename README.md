@@ -1,11 +1,11 @@
-# react-functional-forms
+# @cordelta/react-forms
 
 Ultra simple, stateless, validated forms for use in React function components.
 
 ## Installation
 
 ```shell script
-yarn add react-functional-forms
+yarn add @cordelta/react-forms
 ```
     
 ## Usage
