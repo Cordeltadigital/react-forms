@@ -7,10 +7,15 @@ export default (props, options) => {
 
   const defaultType = {
     setInitialValue: ({ set }) => {
-      set((value || defaultValue)
-        ? value || defaultValue
-        : options.defaultValue && resolveValue(options.defaultValue, [props])
-      )
+      if(value !== undefined) {
+        set(value)
+      } else if (defaultValue !== undefined) {
+        set(defaultValue)
+      } else if (options.defaultValue !== undefined) {
+        set(resolveValue(options.defaultValue, [props]))
+      } else {
+        set(undefined)
+      }
     },
     getOutputValue: ({ event }) => {
       if (event.target && event.target.value !== undefined) {

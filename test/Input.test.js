@@ -76,4 +76,16 @@ test("passing numeric prop coerces values to numbers", () => {
   validateCalls({ text: 3.5 })
 })
 
+test("initial value of empty string is preserved", () => {
+  const { submit, validateCalls } = setup({ value: '' })
+  submit()
+  validateCalls({ text: '' })
+})
+
+test("default value of empty string is preserved", () => {
+  const { submit, validateCalls } = setup({ defaultValue: '' })
+  submit()
+  validateCalls({ text: '' })
+})
+
 // test("provided id is preserved")
