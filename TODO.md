@@ -1,0 +1,3 @@
+- Make opinionated fields default implementation
+- Update readme
+- 
