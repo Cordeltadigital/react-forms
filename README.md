@@ -4,7 +4,7 @@ Ultra simple, stateless, validated forms for use in React function components.
 
 ## Installation
 
-```shell script
+```shell
 yarn add @cordelta/react-forms
 ```
     
