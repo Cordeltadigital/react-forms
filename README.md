@@ -120,7 +120,7 @@ form .validated:invalid {
 `react-functional-forms` exposes functions that can be used to wrap components so that they can be included in output 
 form value objects.
 
-```jsx harmony
+```jsx
 import React from 'react'
 import { wrapInput, wrapSubmit, Form } from 'react-functional-forms'
 
@@ -157,7 +157,7 @@ safely ignored or passed on.
 
 The functions described above can also be used to easily wrap components from third party libraries.
 
-```jsx harmony
+```jsx
 import { wrapInput } from 'react-functional-forms'
 import * as material from '@material-ui/core'
 
