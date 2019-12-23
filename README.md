@@ -12,7 +12,7 @@ yarn add @cordelta/react-forms
 
 ```jsx
 import React from 'react'
-import { Form, Input, Textarea, Select, Submit } from 'react-functional-forms'
+import { Form, Input, Textarea, Select, Submit } from '@cordelta/react-forms'
 
 export default ({ onSubmit, onCancel, initialValues }) => (
   <Form onSubmit={onSubmit} values={initialValues}>
@@ -122,7 +122,7 @@ form value objects.
 
 ```jsx
 import React from 'react'
-import { wrapInput, wrapSubmit, Form } from 'react-functional-forms'
+import { wrapInput, wrapSubmit, Form } from '@cordelta/react-forms'
 
 const InputField = wrapInput(({ label, className, ...inputProps }) =>
   <div className={className}>
