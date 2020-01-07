@@ -1,7 +1,7 @@
 import { createElement, createRef, useReducer } from 'react'
 import { keyPath } from './keyPath'
 
-export default ContextProvider => props => {
+export default (ContextProvider, additionalContext = {}) => props => {
   const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), props.values || {})
   const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
   const form = createRef()
@@ -25,9 +25,14 @@ export default ContextProvider => props => {
 
   const className = `react-forms ${props.className || ''}`
 
+  const mergedAdditionalContext = Object.keys(additionalContext).reduce(
+    (result, property) => ({ ...result, [property]: props[property] || additionalContext[property] }),
+    {}
+  )
+
   return (
     createElement('form', { ...props, className, noValidate: true, onSubmit: onSubmit, ref: form, children: [
-      createElement(ContextProvider, { ...props, key: 'context', value: { registerFieldValidator, setFieldValue, getFieldValue, onSubmit } }),
+      createElement(ContextProvider, { ...props, key: 'context', value: { registerFieldValidator, setFieldValue, getFieldValue, onSubmit, ...mergedAdditionalContext } }),
       createElement('input', { key: 'submit', type: 'submit', style: { visibility: 'hidden', position: 'absolute' } })
     ] })
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import { createSetup } from './setup'
-import { Form, Input, Textarea, Select, Submit } from '../src'
+import { Form, Input, Textarea, Select, Submit, context } from '../src'
+import FormProvider from '../src/Form'
 
 const simpleForm = createSetup(({ props, spy }) =>
   <Form onSubmit={spy}>
@@ -68,4 +69,26 @@ test("values can be set from prop passed to Form component", () => {
     { text: 'initial', check1: true, check2: undefined, radio: '2' },
     { text: 'changed', check1: true, check2: undefined, radio: '2' }
   )
+})
+
+test("additional context values are passed to consumers as props", () => {
+  const CustomForm = FormProvider(context.Provider, { newProp: 2 })
+  const { element } = createSetup(() =>
+    <CustomForm>
+      <Input name="text" />
+      <Submit />
+    </CustomForm>
+  )()
+  expect(element('input', 'text').props().newProp).toBe(2)
+})
+
+test("additional context values can be overridden with props on the form", () => {
+  const CustomForm = FormProvider(context.Provider, { newProp: 2 })
+  const { element } = createSetup(() =>
+    <CustomForm newProp={3}>
+      <Input name="text" />
+      <Submit />
+    </CustomForm>
+  )()
+  expect(element('input', 'text').props().newProp).toBe(3)
 })
