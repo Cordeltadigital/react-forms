@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { createSetup } from './setup'
 import { Form, Input, Textarea, Select, Submit, context } from '../src'
 import FormProvider from '../src/Form'
@@ -72,23 +73,48 @@ test("values can be set from prop passed to Form component", () => {
 })
 
 test("additional context values are passed to consumers as props", () => {
-  const CustomForm = FormProvider(context.Provider, { newProp: 2 })
+  const CustomForm = FormProvider(context.Provider, { newprop: 2 })
   const { element } = createSetup(() =>
     <CustomForm>
       <Input name="text" />
       <Submit />
     </CustomForm>
   )()
-  expect(element('input', 'text').props().newProp).toBe(2)
+  expect(element('input', 'text').props().newprop).toBe(2)
 })
 
 test("additional context values can be overridden with props on the form", () => {
-  const CustomForm = FormProvider(context.Provider, { newProp: 2 })
+  const CustomForm = FormProvider(context.Provider, { newprop: 2 })
   const { element } = createSetup(() =>
-    <CustomForm newProp={3}>
+    <CustomForm newprop={3}>
       <Input name="text" />
       <Submit />
     </CustomForm>
   )()
-  expect(element('input', 'text').props().newProp).toBe(3)
+  expect(element('input', 'text').props().newprop).toBe(3)
+})
+
+test("errors on submission cause error message to be displayed by default", () => {
+  const { submit, form } = createSetup(() =>
+    <Form onSubmit={() => { throw new Error('error message') }}>
+      <Submit />
+    </Form>
+  )()
+  submit()
+  expect(form.find('.react-forms-error').text()).toBe('error message')
+})
+
+test("errors returned in promise on submission cause error message to be displayed by default", () => {
+  const { submit, form } = createSetup(() =>
+    <Form onSubmit={() => Promise.reject('error message')}>
+      <Submit />
+    </Form>
+  )()
+  return act(() => {
+    submit()
+    return new Promise(r => setTimeout(r)).then(() => {
+      form.update()
+      expect(form.find('.react-forms-error').text()).toBe('error message')
+    })
+  })
 })

@@ -1,7 +1,9 @@
 import { createContext, createElement } from 'react'
 import FormProvider from './Form'
+import ErrorMessage from './ErrorMessage'
 import submit from './submit'
 import input from './input'
+import './styles'
 
 export const context = createContext({})
 
@@ -10,7 +12,7 @@ const createConsumer = ConsumerComponent => props => createElement(
   { children: context => createElement(ConsumerComponent, { ...context, ...props }) }
 )
 
-export const Form = FormProvider(context.Provider)
+export const Form = FormProvider(context.Provider, {}, ErrorMessage)
 export const Submit = createConsumer(submit(props => createElement('button', props)))
 
 export const Input = createConsumer(input(props => createElement('input', props)))

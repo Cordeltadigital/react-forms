@@ -1,9 +1,10 @@
-import { createElement, createRef, useReducer } from 'react'
+import { createElement, createRef, useReducer, useState } from 'react'
 import { keyPath } from './keyPath'
 
-export default (ContextProvider, additionalContext = {}) => props => {
+export default (ContextProvider, additionalContext = {}, ErrorMessage) => props => {
   const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), props.values || {})
   const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
+  const [error, setError] = useState()
   const form = createRef()
 
   const getFieldValue = name => fieldValues[name]
@@ -16,8 +17,14 @@ export default (ContextProvider, additionalContext = {}) => props => {
     fieldValidators.forEach(setFieldValidated => setFieldValidated())
 
     if(form.current.checkValidity() && props.onSubmit) {
-      props.onSubmit(getFieldValues())
-      // TODO: `resetOnSubmit` option
+      setError()
+      try {
+        Promise.resolve(props.onSubmit(getFieldValues()))
+          // .then(() => /* TODO: `resetOnSubmit` option */)
+          .catch(error => setError(error))
+      } catch(error) {
+        setError(error)
+      }
     }
 
     e.preventDefault()
@@ -33,7 +40,8 @@ export default (ContextProvider, additionalContext = {}) => props => {
   return (
     createElement('form', { ...props, className, noValidate: true, onSubmit: onSubmit, ref: form, children: [
       createElement(ContextProvider, { ...props, key: 'context', value: { registerFieldValidator, setFieldValue, getFieldValue, onSubmit, ...mergedAdditionalContext } }),
-      createElement('input', { key: 'submit', type: 'submit', style: { visibility: 'hidden', position: 'absolute' } })
+      error && createElement(ErrorMessage, { key: 'error', error }),
+      createElement('input', { key: 'submit', type: 'submit', style: { visibility: 'hidden', position: 'absolute' } }),
     ] })
   )
 }
