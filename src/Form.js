@@ -22,7 +22,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => ({ res
       setError()
       try {
         const reset = () => {
-          if(resetOnSubmit !== false && resetOnSubmit !== 'false') {
+          if(resetOnSubmit) {
             setFieldValues(props.values || {})
           }
         }

@@ -119,21 +119,33 @@ test("errors returned in promise on submission cause error message to be display
   })
 })
 
-test("form is reset after successful submission", () => {
-  const { change, element, submit } = simpleForm()
+test("form is reset after successful submission if resetOnSubmit is specified", () => {
+  const { change, element, submit } = createSetup(({ props, spy }) =>
+    <Form onSubmit={spy} resetOnSubmit>
+      <Input name="text" {...props} />
+      <Submit />
+    </Form>
+  )()
   change('input', 'text', 'some text')
   submit()
   expect(element('input', 'text').props().value).toBe('')
 })
 
 test("form is not reset if resetOnSubmit is false", () => {
+  const { change, element, submit } = simpleForm()
+  change('input', 'text', 'some text')
+  submit()
+  expect(element('input', 'text').props().value).toBe('some text')
+})
+
+test("form is reset to originally provided values", () => {
   const { change, element, submit } = createSetup(({ props, spy }) =>
-    <Form onSubmit={spy} resetOnSubmit={false}>
+    <Form onSubmit={spy} values={{ text: 'some text' }} resetOnSubmit>
       <Input name="text" {...props} />
       <Submit />
     </Form>
   )()
-  change('input', 'text', 'some text')
+  change('input', 'text', 'changed')
   submit()
   expect(element('input', 'text').props().value).toBe('some text')
 })
