@@ -1,7 +1,7 @@
 import { createElement } from 'react'
 
 export const extractErrorMessage = error => error
-  ? error.hasOwnProperty('stack')
+  ? (error.hasOwnProperty('stack') || error.hasOwnProperty('message'))
     ? error.message || 'An error occurred'
     : error
   : 'An error occurred'
