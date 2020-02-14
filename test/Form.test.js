@@ -106,7 +106,7 @@ test("errors on submission cause error message to be displayed by default", () =
 
 test("errors returned in promise on submission cause error message to be displayed by default", () => {
   const { submit, form } = createSetup(() =>
-    <Form onSubmit={() => Promise.reject('error message')}>
+    <Form onSubmit={() => Promise.reject('rejected')}>
       <Submit />
     </Form>
   )()
@@ -114,7 +114,26 @@ test("errors returned in promise on submission cause error message to be display
     submit()
     return new Promise(r => setTimeout(r)).then(() => {
       form.update()
-      expect(form.find('.react-forms-error').text()).toBe('error message')
+      expect(form.find('.react-forms-error').text()).toBe('rejected')
     })
   })
+})
+
+test("form is reset after successful submission", () => {
+  const { change, element, submit } = simpleForm()
+  change('input', 'text', 'some text')
+  submit()
+  expect(element('input', 'text').props().value).toBe('')
+})
+
+test("form is not reset if resetOnSubmit is false", () => {
+  const { change, element, submit } = createSetup(({ props, spy }) =>
+    <Form onSubmit={spy} resetOnSubmit={false}>
+      <Input name="text" {...props} />
+      <Submit />
+    </Form>
+  )()
+  change('input', 'text', 'some text')
+  submit()
+  expect(element('input', 'text').props().value).toBe('some text')
 })

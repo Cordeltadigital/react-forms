@@ -1,8 +1,8 @@
 import { createElement, createRef, useReducer, useState } from 'react'
 import { keyPath } from './keyPath'
 
-export default (ContextProvider, additionalContext = {}, ErrorMessage) => props => {
-  const [fieldValues, setFieldValue] = useReducer((values, field) => ({ ...values, ...field }), props.values || {})
+export default (ContextProvider, additionalContext = {}, ErrorMessage) => ({ resetOnSubmit, ...props }) => {
+  const [fieldValues, setFieldValues] = useState(props.values || {})
   const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
   const [error, setError] = useState()
   const form = createRef()
@@ -13,15 +13,26 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => props 
     {}
   )
 
+  const setFieldValue = field => setFieldValues({ ...fieldValues, ...field })
+
   const onSubmit = e => {
     fieldValidators.forEach(setFieldValidated => setFieldValidated())
 
     if(form.current.checkValidity() && props.onSubmit) {
       setError()
       try {
-        Promise.resolve(props.onSubmit(getFieldValues()))
-          // .then(() => /* TODO: `resetOnSubmit` option */)
-          .catch(error => setError(error))
+        const reset = () => {
+          if(resetOnSubmit !== false && resetOnSubmit !== 'false') {
+            setFieldValues(props.values || {})
+          }
+        }
+
+        const result = props.onSubmit(getFieldValues())
+          if(result && typeof result.then === 'function') {
+            result.then(reset).catch(error => setError(error))
+          } else {
+            reset()
+          }
       } catch(error) {
         setError(error)
       }
