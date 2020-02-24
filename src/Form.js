@@ -47,7 +47,6 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
       classNames.push('react-forms-row')
     }
 
-    // umm... { ...additionalContext, ...props }???
     const mergedAdditionalContext = Object.keys(additionalContext).reduce(
       (result, property) => ({ ...result, [property]: props[property] || additionalContext[property] }),
       {}
