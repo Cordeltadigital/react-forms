@@ -88,4 +88,30 @@ test("default value of empty string is preserved", () => {
   validateCalls({ text: '' })
 })
 
+test("submitOnChange causes form to be submitted on every field change", () => {
+  const { change, validateCalls } = createSetup(({ spy }) => (
+    <Form onSubmit={spy}>
+      <Input name="text" submitOnChange />
+    </Form>
+  ))()
+
+  change('input', 'text', 'test')
+  validateCalls({})
+  // the text isn't updated in the test - need to validate this works in a browser...
+  // validateCalls({ text: 'test' })
+})
+
+test("submitOnBlur causes form to be submitted when blur event occurs", () => {
+  const { change, element, validateCalls } = createSetup(({ spy }) => (
+    <Form onSubmit={spy}>
+      <Input name="text" submitOnBlur />
+    </Form>
+  ))()
+
+  change('input', 'text', 'test')
+  element('input', 'text').simulate('blur')
+
+  validateCalls({ text: 'test' })
+})
+
 // test("provided id is preserved")

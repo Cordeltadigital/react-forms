@@ -39,7 +39,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
         }
       }
 
-      e.preventDefault()
+      e && e.preventDefault && e.preventDefault()
     }
 
     const classNames = ['react-forms', props.className]

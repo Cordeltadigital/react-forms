@@ -34,7 +34,7 @@ export default (render, options = {}) => function Input(props) {
 
   const onChange = (...args) => {
     const [event] = args
-    const { name, setFieldValue, onChange } = props
+    const { name, setFieldValue, onChange, submitOnChange, onSubmit } = props
     const { valueFromEvent } = options
     const { getOutputValue, applyValueTransforms } = types(props, options)
 
@@ -52,6 +52,22 @@ export default (render, options = {}) => function Input(props) {
     if(onChange) {
       onChange.apply(event.target, args)
     }
+
+    if(submitOnChange) {
+      onSubmit()
+    }
+  }
+
+  const onBlur = (...args) => {
+    const { submitOnBlur, onSubmit, onBlur } = props
+    const [event] = args
+
+    if(submitOnBlur) {
+      onSubmit()
+    }
+    if(onBlur) {
+      onBlur.apply(event.target, args)
+    }
   }
 
   const updateValidationState = () => {
@@ -68,6 +84,7 @@ export default (render, options = {}) => function Input(props) {
     const {
       type, name, value, checked, defaultValue, numeric,
       onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
+      submitOnChange, submitOnBlur,
       ...passThroughProps
     } = props
     const valueProps = getValueProps({ currentValue: getFieldValue(name) })
@@ -76,7 +93,7 @@ export default (render, options = {}) => function Input(props) {
     const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
     const finalProps = {
-      id, name, className, onChange,
+      id, name, className, onChange, onBlur,
       ...passThroughProps, ...valueProps, ...typeProps, ...errorProps
     }
 
