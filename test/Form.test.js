@@ -149,3 +149,8 @@ test("form is reset to originally provided values", () => {
   submit()
   expect(element('input', 'text').props().value).toBe('some text')
 })
+
+test("specifying row prop adds react-forms-row class", () => {
+  const { form } = createSetup(() => <Form row />)()
+  expect(form.find('form').hasClass('react-forms-row')).toBe(true)
+})

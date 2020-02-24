@@ -12,6 +12,15 @@ const createConsumer = ConsumerComponent => props => createElement(
   { children: context => createElement(ConsumerComponent, { ...context, ...props }) }
 )
 
+export const createRawConsumer = ConsumerComponent => (
+  props => createElement(
+    context.Consumer,
+    { children: ({ registerFieldValidator, setFieldValue, getFieldValue, ...context }) => (
+      createElement(ConsumerComponent, { ...context, ...props })
+    )}
+  )
+)
+
 export const Form = FormProvider(context.Provider, {}, ErrorMessage)
 export const Submit = createConsumer(submit(props => createElement('button', props)))
 
