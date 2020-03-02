@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import usePrevious from './usePrevious'
+import useUpdate from './useUpdate'
 import types from './inputTypes'
 
 const nextElementId = (id => () => `react-forms-${++id}`)(0)
@@ -10,6 +12,7 @@ export default (render, options = {}) => function Input(props) {
   const [fieldValidated, setFieldValidated] = useState(false)
   const [error, setError] = useState(false)
   const [id] = useState(props.id || nextElementId())
+  const previousValueProp = usePrevious(props.value)
 
   useEffect(() => {
     const { name, getFieldValue, setFieldValue, registerFieldValidator } = props
@@ -31,6 +34,17 @@ export default (render, options = {}) => function Input(props) {
 
     // TODO: need to unregister in case of dynamic form elements
   }, [])
+
+  // ensure form values are updated to reflect passed `value` prop
+  // this probably introduces some redundancy with the onChange handler below
+  useUpdate(() => {
+    const { name, value, setFieldValue } = props
+    const { applyValueTransforms } = types(props, options)
+
+    if(value !== previousValueProp) {
+      setFieldValue({ [name]: applyValueTransforms(value) })
+    }
+  }, [props])
 
   const onChange = (...args) => {
     const [event] = args

@@ -1,4 +1,4 @@
-import injectCss from '@cordelta/react-forms/src/injectCss'
+import injectCss from './injectCss'
 
 injectCss('react-forms-styles', `
 .react-forms {

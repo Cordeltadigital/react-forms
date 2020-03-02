@@ -1,6 +1,7 @@
 import React from 'react'
 import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
+import { Text } from '@cordelta/react-forms-material'
 
 const setup = createSetup(({ props, spy }) => (
   <Form onSubmit={spy}>
@@ -10,8 +11,9 @@ const setup = createSetup(({ props, spy }) => (
 ))
 
 test("initial values are set and can be changed", () => {
-  const { submit, change, validateCalls } = setup({ value: 'initial' })
+  const { element, submit, change, validateCalls } = setup({ value: 'initial' })
 
+  expect(element('input', 'text').instance().value).toBe('initial')
   submit()
   change('input', 'text', 'changed')
   submit()
@@ -112,6 +114,35 @@ test("submitOnBlur causes form to be submitted when blur event occurs", () => {
   element('input', 'text').simulate('blur')
 
   validateCalls({ text: 'test' })
+})
+
+test("input can be controlled using value prop", () => {
+  const Container = ({ value, spy }) => (
+    <Form onSubmit={spy}>
+      <Input name="text" value={value} />
+      <Submit>Submit</Submit>
+    </Form>
+  )
+
+  const { form, element, change, validateCalls, submit } = createSetup(({ props, spy }) => (
+    <Container value={props.value} spy={spy} />
+  ))({})
+
+  const input = element('input', 'text')
+
+  expect(input.instance().value).toBe('')
+  submit()
+  validateCalls({ text: undefined })
+
+  form.setProps({ value: 'test' })
+  form.update()
+  expect(input.instance().value).toBe('test')
+  submit()
+  validateCalls({ text: undefined }, { text: 'test' })
+
+  change('input', 'text', 'test2')
+  submit()
+  validateCalls({ text: undefined }, { text: 'test' }, { text: 'test2' })
 })
 
 // test("provided id is preserved")
