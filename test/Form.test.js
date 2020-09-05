@@ -119,6 +119,36 @@ test("errors returned in promise on submission cause error message to be display
   })
 })
 
+test("results with error property cause error property to be displayed", () => {
+  const { submit, form } = createSetup(() =>
+    <Form onSubmit={() => Promise.resolve({ error: 'test error' })}>
+      <Submit />
+    </Form>
+  )()
+  return act(() => {
+    submit()
+    return new Promise(r => setTimeout(r)).then(() => {
+      form.update()
+      expect(form.find('.react-forms-error').text()).toBe('test error')
+    })
+  })
+})
+
+test("results with success property set to false cause message property to be displayed", () => {
+  const { submit, form } = createSetup(() =>
+    <Form onSubmit={() => Promise.resolve({ success: false, message: 'test error' })}>
+      <Submit />
+    </Form>
+  )()
+  return act(() => {
+    submit()
+    return new Promise(r => setTimeout(r)).then(() => {
+      form.update()
+      expect(form.find('.react-forms-error').text()).toBe('test error')
+    })
+  })
+})
+
 test("form is reset after successful submission if resetOnSubmit is specified", () => {
   const { change, element, submit } = createSetup(({ props, spy }) =>
     <Form onSubmit={spy} resetOnSubmit>
@@ -153,4 +183,38 @@ test("form is reset to originally provided values", () => {
 test("specifying row prop adds react-forms-row class", () => {
   const { form } = createSetup(() => <Form row />)()
   expect(form.find('form').hasClass('react-forms-row')).toBe(true)
+})
+
+test("interactive form elements are disabled until returned promise resolves", () => {
+  let resolveSubmit
+  const onSubmit = () => new Promise(resolve => resolveSubmit = resolve)
+
+  const { form, submit } = createSetup(() =>
+    <>
+      <Form onSubmit={onSubmit}>
+        <Input name="input" key={'Input'} className="interactive" />,
+        <Textarea name="textarea" key={'Textarea'} className="interactive" />,
+        <Select name="select" key={'Select'} className="interactive" />,
+        <input key={'input'} className="interactive" />,
+        <Submit key={'Submit'} className="interactive" />
+
+        <p key={'p'} className="noninteractive">paragraph</p>,
+        <span key={'span'} className="noninteractive">span</span>
+      </Form>
+      <input key={'external'} className="external" />
+    </>
+  )()
+
+  const expectDisabled = disabled => {
+    form.find('.interactive').forEach(x => expect(x.getDOMNode().disabled).toBe(disabled))
+    form.find('.noninteractive').forEach(x => expect(x.getDOMNode().disabled).toBe(undefined))
+    form.find('.external').forEach(x => expect(x.getDOMNode().disabled).toBe(false))
+  }
+
+  expectDisabled(false)
+  submit()
+  expectDisabled(true)
+  resolveSubmit()
+
+  return Promise.resolve().then(() => expectDisabled(false))
 })

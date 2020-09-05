@@ -5,8 +5,12 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
   ({ resetOnSubmit, row, ...props }) => {
     const [fieldValues, setFieldValues] = useState(props.values || {})
     const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
-    const [error, setError] = useState()
+    const [error, realsetError] = useState()
     const form = createRef()
+
+    const setError = error => {
+      realsetError(error)
+    }
 
     const getFieldValue = name => fieldValues[name]
     const getFieldValues = () => Object.keys(fieldValues).reduce(
@@ -22,15 +26,31 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
       if(form.current.checkValidity() && props.onSubmit) {
         setError()
         try {
+          const interactiveElements = form.current.querySelectorAll('input,button,textarea,select')
+          const setFormDisabled = disabled => interactiveElements.forEach(x => {
+            x.disabled = disabled
+          })
           const reset = () => {
+            setFormDisabled(false)
             if(resetOnSubmit) {
               setFieldValues(props.values || {})
             }
           }
 
+          const checkResultForError = result => {
+            if(result && (result.success === false || result.error)) {
+              setError(result.error || result.message || 'Form submission failed')
+            } else {
+              reset()
+            }
+          }
+
           const result = props.onSubmit(getFieldValues())
             if(result && typeof result.then === 'function') {
-              result.then(reset).catch(error => setError(error))
+              setFormDisabled(true)
+              result
+                .then(checkResultForError)
+                .catch(setError)
             } else {
               reset()
             }

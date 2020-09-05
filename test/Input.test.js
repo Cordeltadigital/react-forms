@@ -1,7 +1,6 @@
 import React from 'react'
 import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
-import { Text } from '@cordelta/react-forms-material'
 
 const setup = createSetup(({ props, spy }) => (
   <Form onSubmit={spy}>
