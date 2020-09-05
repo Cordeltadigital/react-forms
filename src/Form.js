@@ -24,25 +24,28 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
       fieldValidators.forEach(setFieldValidated => setFieldValidated())
 
       if(form.current.checkValidity() && props.onSubmit) {
-        setError()
-        try {
-          const interactiveElements = form.current.querySelectorAll('input,button,textarea,select')
-          const setFormDisabled = disabled => interactiveElements.forEach(x => {
-            x.disabled = disabled
-          })
-          const reset = () => {
-            setFormDisabled(false)
-            if(resetOnSubmit) {
-              setFieldValues(props.values || {})
-            }
-          }
+        setError(undefined)
 
+        const interactiveElements = form.current.querySelectorAll('input,button,textarea,select')
+        const setFormDisabled = disabled => interactiveElements.forEach(x => {
+          x.disabled = disabled
+        })
+
+        const reset = () => {
+          if(resetOnSubmit) {
+            setFieldValues(props.values || {})
+          }
+        }
+
+        try {
           const checkResultForError = result => {
             if(result && (result.success === false || result.error)) {
               setError(result.error || result.message || 'Form submission failed')
             } else {
               reset()
             }
+            setFormDisabled(false)
+            return result
           }
 
           const result = props.onSubmit(getFieldValues())

@@ -216,5 +216,6 @@ test("interactive form elements are disabled until returned promise resolves", (
   expectDisabled(true)
   resolveSubmit()
 
-  return Promise.resolve().then(() => expectDisabled(false))
+  return new Promise(resolve => setTimeout(resolve, 5))
+    .then(() => expectDisabled(false))
 })
