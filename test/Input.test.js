@@ -97,13 +97,19 @@ test("submitOnChange causes form to be submitted on every field change", () => {
     </Form>
   ))()
 
-  return act(() => {
-    change('input', 'text', 'test')
+  change('input', 'text', 'test')
+  validateCalls({ text: 'test' })
+})
 
-    return (new Promise(resolve => setTimeout(resolve))).then(() => {
-      validateCalls({ text: 'test' })
-    })
-  })
+test("submitOnChange causes form to be submitted on every field change", () => {
+  const { change, validateCalls } = createSetup(({ spy }) => (
+    <Form onSubmit={spy}>
+      <Input name="text" submitOnChange />
+    </Form>
+  ))()
+
+  change('input', 'text', 'test')
+  validateCalls({ text: 'test' })
 })
 
 test("submitOnBlur causes form to be submitted when blur event occurs", () => {

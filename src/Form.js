@@ -9,14 +9,14 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
     const form = createRef()
 
     const getFieldValue = name => fieldValues[name]
-    const getFieldValues = () => Object.keys(fieldValues).reduce(
-      (values, name) => keyPath.set(name, { ...values }, fieldValues[name]),
+    const mapFieldValues = target => Object.keys(target).reduce(
+      (values, name) => keyPath.set(name, { ...values }, target[name]),
       {}
     )
 
     const setFieldValue = field => setFieldValues({ ...fieldValues, ...field })
 
-    const onSubmit = e => {
+    const onSubmit = (e, additionalValues) => {
       fieldValidators.forEach(setFieldValidated => setFieldValidated())
 
       if(form.current.checkValidity() && props.onSubmit) {
@@ -42,7 +42,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
             return result
           }
 
-          const result = props.onSubmit(getFieldValues())
+          const result = props.onSubmit(mapFieldValues({ ...fieldValues, ...additionalValues }))
             if(result && typeof result.then === 'function') {
               setFormDisabled(true)
               result

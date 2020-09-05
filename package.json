@@ -1,13 +1,13 @@
 {
   "name": "@cordelta/react-forms",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Ultra simple, stateless, validated forms for use in React function components",
   "main": "dist/index.js",
   "module": "src/index.js",
   "scripts": {
     "test": "jest",
     "build": "babel src --out-dir dist",
-    "prepublish": "babel src --source-maps false --out-dir dist"
+    "prepare": "babel src --source-maps false --out-dir dist"
   },
   "peerDependencies": {
     "react": "^16.12.0"

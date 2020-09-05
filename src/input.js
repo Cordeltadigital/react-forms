@@ -15,6 +15,7 @@ export default (render, options = {}) => function Input(props) {
   const [id] = useState(props.id || nextElementId())
   const previousValueProp = usePrevious(props.value)
 
+  // this is currently broken :-\
   const {  throttle, onSubmit } = props
   const submitHandler = (throttle && onSubmit) ? createThrottled(onSubmit, isNaN(throttle) ? 200 : throttle) : onSubmit
 
@@ -72,9 +73,9 @@ export default (render, options = {}) => function Input(props) {
     }
 
     if(submitOnChange && submitHandler) {
-      // the setFieldValue above sets state on the Form component
-      // this requires a render cycle to update the state before calling onSubmit
-      setTimeout(submitHandler)
+      // the setFieldValue above sets state on the Form component, used in the onSubmit handler
+      // setting state requires an additional render cycle - we need to pass in the new value so it's set correctly
+      submitHandler(undefined, { [name]: applyValueTransforms(elementValue) })
     }
   }
 
@@ -104,7 +105,7 @@ export default (render, options = {}) => function Input(props) {
     const {
       type, name, value, checked, defaultValue, numeric,
       onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
-      submitOnChange, submitOnBlur,
+      submitOnChange, submitOnBlur, throttle,
       ...passThroughProps
     } = props
     const valueProps = getValueProps({ currentValue: getFieldValue(name) })
