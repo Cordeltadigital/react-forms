@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import usePrevious from './usePrevious'
 import useUpdate from './useUpdate'
 import types from './inputTypes'
+import createThrottled from './throttle'
 
 const nextElementId = (id => () => `react-forms-${++id}`)(0)
 
@@ -13,6 +14,9 @@ export default (render, options = {}) => function Input(props) {
   const [error, setError] = useState(false)
   const [id] = useState(props.id || nextElementId())
   const previousValueProp = usePrevious(props.value)
+
+  const {  throttle, onSubmit } = props
+  const submitHandler = (throttle && onSubmit) ? createThrottled(onSubmit, isNaN(throttle) ? 200 : throttle) : onSubmit
 
   useEffect(() => {
     const { name, getFieldValue, setFieldValue, registerFieldValidator } = props
@@ -48,7 +52,7 @@ export default (render, options = {}) => function Input(props) {
 
   const onChange = (...args) => {
     const [event] = args
-    const { name, setFieldValue, onChange, submitOnChange, onSubmit } = props
+    const { name, setFieldValue, onChange, submitOnChange } = props
     const { valueFromEvent } = options
     const { getOutputValue, applyValueTransforms } = types(props, options)
 
@@ -67,8 +71,10 @@ export default (render, options = {}) => function Input(props) {
       onChange.apply(event.target, args)
     }
 
-    if(submitOnChange) {
-      onSubmit()
+    if(submitOnChange && submitHandler) {
+      // the setFieldValue above sets state on the Form component
+      // this requires a render cycle to update the state before calling onSubmit
+      setTimeout(submitHandler)
     }
   }
 

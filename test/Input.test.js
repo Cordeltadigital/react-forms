@@ -1,6 +1,7 @@
 import React from 'react'
 import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
+import { act } from 'react-dom/test-utils'
 
 const setup = createSetup(({ props, spy }) => (
   <Form onSubmit={spy}>
@@ -96,10 +97,13 @@ test("submitOnChange causes form to be submitted on every field change", () => {
     </Form>
   ))()
 
-  change('input', 'text', 'test')
-  validateCalls({})
-  // the text isn't updated in the test - need to validate this works in a browser...
-  // validateCalls({ text: 'test' })
+  return act(() => {
+    change('input', 'text', 'test')
+
+    return (new Promise(resolve => setTimeout(resolve))).then(() => {
+      validateCalls({ text: 'test' })
+    })
+  })
 })
 
 test("submitOnBlur causes form to be submitted when blur event occurs", () => {

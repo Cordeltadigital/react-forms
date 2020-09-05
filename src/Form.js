@@ -5,12 +5,8 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
   ({ resetOnSubmit, row, ...props }) => {
     const [fieldValues, setFieldValues] = useState(props.values || {})
     const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
-    const [error, realsetError] = useState()
+    const [error, setError] = useState()
     const form = createRef()
-
-    const setError = error => {
-      realsetError(error)
-    }
 
     const getFieldValue = name => fieldValues[name]
     const getFieldValues = () => Object.keys(fieldValues).reduce(
@@ -27,9 +23,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
         setError(undefined)
 
         const interactiveElements = form.current.querySelectorAll('input,button,textarea,select')
-        const setFormDisabled = disabled => interactiveElements.forEach(x => {
-          x.disabled = disabled
-        })
+        const setFormDisabled = disabled => interactiveElements.forEach(x => x.disabled = disabled)
 
         const reset = () => {
           if(resetOnSubmit) {
