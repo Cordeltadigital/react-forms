@@ -3,9 +3,10 @@ import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
 import { act } from 'react-dom/test-utils'
 
-const setup = createSetup(({ props, spy }) => (
+const setup = createSetup(({ props, spy }, includeSecond) => (
   <Form onSubmit={spy}>
     <Input name="text" {...props} />
+    {includeSecond && <Input name="text2" value="initial2" />}
     <Submit />
   </Form>
 ))
@@ -19,6 +20,19 @@ test("initial values are set and can be changed", () => {
   submit()
 
   validateCalls({ text: 'initial' }, { text: 'changed' })
+})
+
+test("multiple initial values can be set and can be changed", () => {
+  const { element, submit, change, validateCalls } = setup({ value: 'initial' }, true)
+
+  expect(element('input', 'text').instance().value).toBe('initial')
+  expect(element('input', 'text2').instance().value).toBe('initial2')
+  submit()
+  change('input', 'text', 'changed')
+  change('input', 'text2', 'changed2')
+  submit()
+
+  validateCalls({ text: 'initial', text2: 'initial2' }, { text: 'changed', text2: 'changed2' })
 })
 
 test("arbitrary props are passed to element", () => {

@@ -14,7 +14,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
       {}
     )
 
-    const setFieldValue = field => setFieldValues({ ...fieldValues, ...field })
+    const setFieldValue = field => setFieldValues(previousValues => ({ ...previousValues, ...field }))
 
     const onSubmit = (e, additionalValues) => {
       fieldValidators.forEach(setFieldValidated => setFieldValidated())

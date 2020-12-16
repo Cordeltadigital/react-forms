@@ -1,9 +1,9 @@
 import enzyme from 'enzyme/build'
 
 export const createSetup = render => (
-  (props = undefined) => {
+  (props = undefined, ...args) => {
     const spy = jest.fn()
-    const form = enzyme.mount(render({ props, spy }))
+    const form = enzyme.mount(render({ props, spy }, ...args))
 
     const submit = (elementType = 'button') => {
       form.find(elementType).simulate('click')
