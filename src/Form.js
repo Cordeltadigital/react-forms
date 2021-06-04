@@ -9,6 +9,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
     const form = createRef()
 
     const getFieldValue = path => get(fieldValues, path)
+    const getFieldValues = () => fieldValues
     const mapFieldValues = target => Object.keys(target).reduce(
       (values, name) => set(values, name, target[name]),
       {}
@@ -84,6 +85,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
               registerFieldValidator,
               setFieldValue,
               getFieldValue,
+              getFieldValues,
               onSubmit,
               ...mergedAdditionalContext
             }

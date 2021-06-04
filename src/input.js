@@ -104,7 +104,7 @@ export default (render, options = {}) => function Input(props) {
 
     const {
       type, name, value, checked, defaultValue, numeric,
-      onSubmit, registerFieldValidator, setFieldValue, getFieldValue,
+      onSubmit, registerFieldValidator, setFieldValue, getFieldValue, getFieldValues,
       submitOnChange, submitOnBlur, throttle,
       ...passThroughProps
     } = props

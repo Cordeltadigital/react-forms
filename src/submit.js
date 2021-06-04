@@ -14,7 +14,7 @@ export default render => function Submit(props) {
     }
   }
 
-  const { onSubmit, registerFieldValidator, setFieldValue, getFieldValue, ...propsToPass } = props
+  const { onSubmit, registerFieldValidator, setFieldValue, getFieldValue, getFieldValues, ...propsToPass } = props
 
   const finalProps = {
     ...propsToPass,

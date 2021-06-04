@@ -3,6 +3,7 @@ import FormProvider from './Form'
 import ErrorMessage from './ErrorMessage'
 import submit from './submit'
 import input from './input'
+import useFormValuesImpl from './useFormValues'
 import './styles'
 
 export const context = createContext({})
@@ -30,5 +31,7 @@ export const Select = createConsumer(input(props => createElement('select', prop
 
 export const wrapInput = (component, options) => createConsumer(input(props => createElement(component, props), options))
 export const wrapSubmit = component => createConsumer(submit(props => createElement(component, props)))
+
+export const useFormValues = useFormValuesImpl(context)
 
 export { FormProvider }
