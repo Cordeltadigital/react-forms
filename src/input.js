@@ -114,8 +114,9 @@ export default (render, options = {}) => function Input(props) {
     const className = ((fieldValidated ? 'validated ' : '') + (props.className || '') || undefined)
 
     const finalProps = {
-      id, name, className, onChange, onBlur,
-      ...passThroughProps, ...valueProps, ...typeProps, ...errorProps
+      id, name, className,
+      ...passThroughProps, ...valueProps, ...typeProps, ...errorProps,
+      onChange, onBlur
     }
 
     return render(finalProps)
