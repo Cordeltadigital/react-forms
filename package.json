@@ -1,6 +1,6 @@
 {
   "name": "@cordelta/react-forms",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Ultra simple, stateless, validated forms for use in React function components",
   "main": "dist/index.js",
   "module": "src/index.js",
