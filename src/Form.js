@@ -8,7 +8,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
     const [error, setError] = useState()
     const form = createRef()
 
-    const getFieldValue = name => fieldValues[name]
+    const getFieldValue = name => keyPath(name, fieldValues)
     const mapFieldValues = target => Object.keys(target).reduce(
       (values, name) => keyPath.set(name, { ...values }, target[name]),
       {}
