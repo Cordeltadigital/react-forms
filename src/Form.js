@@ -1,5 +1,5 @@
 import { createElement, createRef, useReducer, useState } from 'react'
-import { keyPath } from './keyPath'
+import { get, set } from 'object-path-immutable'
 
 export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
   ({ resetOnSubmit, row, ...props }) => {
@@ -8,13 +8,13 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
     const [error, setError] = useState()
     const form = createRef()
 
-    const getFieldValue = name => keyPath(name, fieldValues)
+    const getFieldValue = path => get(fieldValues, path)
     const mapFieldValues = target => Object.keys(target).reduce(
-      (values, name) => keyPath.set(name, { ...values }, target[name]),
+      (values, name) => set(values, name, target[name]),
       {}
     )
 
-    const setFieldValue = field => setFieldValues(previousValues => ({ ...previousValues, ...field }))
+    const setFieldValue = (path, value) => setFieldValues(previousValues => set(previousValues, path, value))
 
     const onSubmit = (e, additionalValues) => {
       fieldValidators.forEach(setFieldValidated => setFieldValidated())

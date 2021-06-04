@@ -1,11 +1,10 @@
 import React from 'react'
 import { createSetup } from './setup'
 import { Form, Input, Submit } from '../src'
-import { act } from 'react-dom/test-utils'
 
-const setup = createSetup(({ props, spy }, includeSecond) => (
+const setup = createSetup(({ props, spy }, includeSecond, name = 'text') => (
   <Form onSubmit={spy}>
-    <Input name="text" {...props} />
+    <Input name={name} {...props} />
     {includeSecond && <Input name="text2" value="initial2" />}
     <Submit />
   </Form>
@@ -20,6 +19,15 @@ test("initial values are set and can be changed", () => {
   submit()
 
   validateCalls({ text: 'initial' }, { text: 'changed' })
+})
+
+test("array indexes create arrays", () => {
+  const { submit, change, validateCalls } = setup({}, false, 'p1.0')
+
+  change('input', 'p1.0', 'changed')
+  submit()
+
+  validateCalls({ p1: ['changed'] })
 })
 
 test("multiple initial values can be set and can be changed", () => {

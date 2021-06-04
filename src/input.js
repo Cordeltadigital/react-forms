@@ -31,7 +31,7 @@ export default (render, options = {}) => function Input(props) {
 
       setInitialValue({
         // pass a setter function - radio buttons do not always want to set a value!
-        set: value => setFieldValue({ [name]: applyValueTransforms(value) }),
+        set: value => setFieldValue(name, applyValueTransforms(value)),
         element: document.querySelector(`#${id}`)
       })
     }
@@ -47,7 +47,7 @@ export default (render, options = {}) => function Input(props) {
     const { applyValueTransforms } = types(props, options)
 
     if(value !== previousValueProp) {
-      setFieldValue({ [name]: applyValueTransforms(value) })
+      setFieldValue(name, applyValueTransforms(value))
     }
   }, [props])
 
@@ -61,7 +61,7 @@ export default (render, options = {}) => function Input(props) {
       ? valueFromEvent.apply(null, args)
       : getOutputValue({ event })
 
-    setFieldValue({ [name]: applyValueTransforms(elementValue) })
+    setFieldValue(name, applyValueTransforms(elementValue))
 
     if(event && event.target && event.target.checkValidity) {
       event.target.checkValidity()
