@@ -2,7 +2,7 @@ import { createElement, createRef, useReducer, useState } from 'react'
 import { get, set } from 'object-path-immutable'
 
 export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
-  ({ resetOnSubmit, row, ...props }) => {
+  ({ resetOnSubmit, row, gap, ...props }) => {
     const [fieldValues, setFieldValues] = useState(props.values || {})
     const [fieldValidators, registerFieldValidator] = useReducer((validators, validator) => [...validators, validator], [])
     const [error, setError] = useState()
@@ -77,6 +77,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
         noValidate: true,
         onSubmit: onSubmit,
         ref: form,
+        ...(gap && { style: { gap } }),
         children: [
           createElement(ContextProvider, {
             ...props,
