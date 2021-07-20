@@ -39,7 +39,6 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
             } else {
               reset()
             }
-            setFormDisabled(false)
             return result
           }
 
@@ -49,6 +48,7 @@ export default (ContextProvider, additionalContext = {}, ErrorMessage) => (
               result
                 .then(checkResultForError)
                 .catch(setError)
+                .finally(() => setFormDisabled(false))
             } else {
               reset()
             }
